@@ -1,10 +1,12 @@
+package SanaIndeksi;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
 /**
- *
+ * Väliaikainen luokka sanan ja rivin jolla se sijaitsee tallentamiseksi.
  * @author heidi
  */
 public class Sana {
