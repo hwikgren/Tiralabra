@@ -17,48 +17,54 @@ import java.util.TreeMap;
  * @author heidi
  */
 public class Tallentaja {
-    
+    /**
+     * Toistaiseksi tiedoston rivit menevät vielä ArrayListiin.
+     */
     public ArrayList<String> rivit;
-    public TreeMap<Integer, Sana> sanat;
-    public int viimeisinRivi;
+    
+    /**
+     * Puu-olento;
+     */
+    public Puu sanaPuu;
 
+    /**
+     * Konstruktori luo tallentajan ja sille puun sanoja varten ja taulukon rivejä varten
+     */
     public Tallentaja() {
+        sanaPuu = new Puu();
+        rivit = new ArrayList<String>();
     }
     
     /**
-     * Metodi tallentaa annetun tiedoston rivit ArrayListiin ja sanat puuhun.
+     * Metodi tallentaa annetun tiedoston rivit ArrayListiin ja sanat puuhun.<p> 
+     * Rivit jaetaan sanoiksi StringTokenizerilla.
      * Ennen sanojen lisäämistä metodi kutsuu trimmaa-metodia.
      * @param tiedosto
      * @throws FileNotFoundException 
      */
     public void tallenna(File tiedosto) throws FileNotFoundException {
         Scanner syotto = new Scanner(tiedosto);
-        
-        rivit = new ArrayList<String>();
-        sanat = new TreeMap<Integer, Sana>();
         int riviLaskin = 0;
-        Integer avain = 0;
-        
+        //Ensimmäinen rivi jätetään tyhjäksi
+        rivit.add(" ");
+        //Käydään teksti läpi rivi kerrallaa
         while (syotto.hasNextLine()) {
             String rivi = syotto.nextLine();
-            rivit.add(rivi);
-            
+            rivit.add(++riviLaskin+". "+rivi);
             String karsittuRivi = rivi.trim();
+            //jaetaan rivi sanoiksi
             StringTokenizer sanoittaja = new StringTokenizer(karsittuRivi);
             while (sanoittaja.hasMoreTokens()) {
                 String sana = sanoittaja.nextToken().toLowerCase();
                 String karsittuSana = trimmaa(sana);
-                Sana sanaOlio = new Sana(karsittuSana, riviLaskin);
-                sanat.put(avain, sanaOlio);
-                avain++;
+                sanaPuu.lisaaSana(karsittuSana, riviLaskin);
             }
-            riviLaskin++;
         }
     }
     
     /**
      * Metodi poistaa annetun sanan alusta ja lopusta mahdolliset merkit, jotka eivät ole kirjaimia.
-     * Metodi kutsuu eiKirjain-metodia.
+     * <p>Tarkistaakseen onko merkki kirjain, metodi kutsuu eiKirjain-metodia.
      * @param sana
      * @return Palauttaa sanan ilman alussa tai lopussa olevia erikoismerkkejä.
      */
@@ -83,11 +89,4 @@ public class Tallentaja {
         return ("abcdefghijklmnopqrstuvwxyzåäö".indexOf(merkki) ==-1);
     }
     
-    public TreeMap<Integer, Sana> getPuu() {
-        return sanat;
-    }
-    
-    public ArrayList<String> getRivit() {
-        return rivit;
-    }
 }

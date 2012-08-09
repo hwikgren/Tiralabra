@@ -12,35 +12,51 @@ import java.util.TreeMap;
  * @author heidi
  */
 public class Hakija {
+    /**
+     * Puuolento.
+     */
+    Puu puu;
     
-    public int viimeisinRivi;
+    /**
+     * Tallentaja-olento
+     */
+    Tallentaja tallentaja;
 
-    public Hakija() {
+    /**
+     * Konstruktori luo Hakija-olennon, jolla on tieto käytetystä puusta ja ohjelman tallentaja olennosta.
+     */
+    public Hakija(Puu puu, Tallentaja tallentaja) {
+        this.puu = puu;
+        this.tallentaja = tallentaja;
     }
     
     /**
-     * Metodi printaa kaikki annetun sanan sisältävät rivit.
-     * Hakee haetun sanan esiintymät puusta. Printaa ArrayListissa olevan rivin mikäli sitä ei ole juuri tulostettu.
+     * Metodi printaa kaikki annetun sanan sisältävät rivit.<p>
+     * Pyytää tallentajalta viimeisimmän rivit sisältävän taulukon.
+     * Jos haetaan sanan osaa (sanan perässä on *), kutsuu puun etsiOsa-metodia.
+     * Muuten kutsuu etsiSana-metodia.
+     * Printaa taulukosta saamaansa listaa vastaavat rivit.
      * Jos sanaa ei löytynyt, kertoo siitä käyttäjälle.
      * @param haettu 
      */
-    public void printtaa(String haettu, Tallentaja tallentaja) {
-        TreeMap<Integer, Sana> sanat = tallentaja.getPuu();
-        ArrayList<String> rivit = tallentaja.getRivit();
-        viimeisinRivi = 0;
-        for (int i=0; i<sanat.size(); i++) {
-            Integer luku = new Integer(i);
-            Sana puunSana = sanat.get(luku);
-            if (puunSana.getSana().equals(haettu)) {
-                int sananRivi = puunSana.getRivi()+1;
-                if (sananRivi >viimeisinRivi) {
-                    System.out.println(""+(sananRivi)+". "+rivit.get(sananRivi-1));
-                    viimeisinRivi = sananRivi;
-                }
+    public void printtaa(String haettu) {
+        ArrayList<String> tekstit = tallentaja.rivit;
+        int[] rivit;
+        if (haettu.charAt(haettu.length()-1) == '*') {
+            rivit = puu.etsiOsa(haettu);
+        }
+        else {
+            rivit = puu.etsiSana(haettu);
+        }
+        if (rivit != null) {
+            for (int i=0; i<rivit.length; i++) {
+                    if (rivit[i] > 0) {
+                        System.out.println(tekstit.get(rivit[i]));
+                    }
             }
         }
-        if (viimeisinRivi == 0) {
-            System.out.println("Sanaa \""+haettu+"\" ei löytynyt tiedostosta!");
+        else {
+            System.out.println("Sanaa \""+haettu+"\" ei löydy tiedostosta!");
         }
     }
     
