@@ -23,7 +23,9 @@ public class PinoSolmu {
     int[] rivit;
 
     /**
-     * Konstruktori luo solmun, jolla on hakusana ja rivi-taulukko sekä tieto edellisestä solmusta.
+     * Konstruktori luo solmun, jolla on hakusana ja rivi-taulukko sekä tieto edellisestä solmusta.<p>
+     * Käytännössä solmuilla on joko hakutermi (and, or, ( ), jolloin solmu on hakutermipinossa 
+     * tai haetun sanan rivitaulukko (sanat-pinossa). Toinen on aina null.
      * @param sana
      * @param rivit
      * @param edellinen 

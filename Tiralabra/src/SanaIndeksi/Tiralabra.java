@@ -10,7 +10,6 @@ import java.util.*;
 /**
  * Ohjelman pääluokka.
  * Sisältää main-metodin.
- * Toistaiseksi kysyy tiedoston joka kerta ja hakee vain yhden sanan.
  * @author heidi
  */
 public class Tiralabra {
@@ -64,7 +63,7 @@ public class Tiralabra {
     private static Scanner lukija = new Scanner(System.in);
     
     /**
-     * Mein-metodi.<p>
+     * Main-metodi.<p>
      * Luo aluksi Tallentaja- ja Hakija-olennot.
      * Näytetään käyttäjälle päävalikko ja reagoidaan valintaan.<br>
      * 

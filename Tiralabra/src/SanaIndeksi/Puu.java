@@ -26,7 +26,7 @@ public class Puu {
      * Lähtee liikkeelle juurisolmusta. Sana käydään läpi kirjain kirjaimelta. 
      * Jos kirjain on sanan viimeinen, asetaan boolean arvo "vika" trueksi.
      * Hakee solmun lapsen, jolla on käsittelyssä oleva kirjain.
-     * Jos lapsi löytyy kutsuu lapsisolmun setRivi-metodia.
+     * Jos lapsi löytyy, kutsuu lapsisolmun setRivi-metodia.
      * Jos lasta ei ollut ennestään, kutsuu solmun setLapsi-metodia.
      * Siirtyy lapsi solmuun ja seuraavaan kirjaimeen.
      * @param sana
@@ -88,7 +88,7 @@ public class Puu {
     /**
      * Metodi hakee listan riveistä, joilla esiintyy haettu sanan osa.<p>
      * Lähtee liikkelle juurisolmusta ja käy läpi haetun sanan kirjaimet, 
-     * paitsi viimeisen joka on * osasanan merkiksi.
+     * (paitsi viimeisen joka on *).
      * Jos lapset loppuvat ennen kuin haetun sanan kirjaimet, palauttaa null.
      * Muuten palauttaa viimeisen kirjaimen listan riveistä, jolla sana ja kaikki sen "lapsisanat" esiintyvät.
      * @param sana

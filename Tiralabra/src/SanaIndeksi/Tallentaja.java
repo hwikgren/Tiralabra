@@ -23,7 +23,7 @@ public class Tallentaja {
     public String[] rivit;
     
     /**
-     * Puu-olento sanojen tallentamiseen;
+     * Puu-olento sanojen tallentamiseen.
      */
     public Puu sanaPuu;
     /**

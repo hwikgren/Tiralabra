@@ -14,7 +14,7 @@ import java.util.TreeMap;
  */
 public class Hakija {
     /**
-     * Puuolento.
+     * Puuolento, jossa tiedostojen sanat.
      */
     Puu puu;
     
@@ -84,11 +84,11 @@ public class Hakija {
         
     }
     /**
-     * Shunting Yard tallentaa hakutermit pinoon ja hakusanat toiseen pinoon.
-     * Käydään läpi hakulauseke vhar kerrallaan.
+     * Shunting Yard tallentaa hakutermit pinoon ja hakusanat toiseen pinoon.<p>
+     * Käydään läpi hakulauseke yksi kerrallaan.
      * Hakutermit 'and' ja 'or sekä oikeat-sulkeet laitetaan hakutermit-pinoon. 
      * Kun hakusana on selvillä kutsutaan etsi-metodia, 
-     * jonka jälkeen lisätään sanat-pinoon lista riveistä joilla sana esiintyy..
+     * jonka jälkeen lisätään sanat-pinoon lista riveistä joilla sana esiintyy. 
      * Jos käsittelyssä oleva char on loppu-sulku kutsutaan haeRivit-metodia.
      * Jos hakutermit-pinossa on vielä termejä hakulausekkeen käsittelyn jälkeen, 
      * kutsutaan haeRivit-metodia kunnes se on tyhjä.
@@ -138,7 +138,7 @@ public class Hakija {
     }
     
     /**
-     * Metodi valitsee metodin hakusanojen yhdistämiselle.
+     * Metodi valitsee metodin hakusanojen yhdistämiselle.<p>
      * Jos hakusana on 'or', kutsuu yhdistaOr-metodia.
      * Muuten kutsuu yhdistaAnd-metodia.
      */
@@ -155,7 +155,7 @@ public class Hakija {
     }
     
     /**
-     * Metodi päättää mitä puun hakumetodia kutsutaan.
+     * Metodi päättää mitä puun hakumetodia kutsutaan.<p>
      * Jos haetaan sanan osaa (sanan perässä on *), kutsuu  etsiOsa-metodia.
      * Muuten kutsuu etsiSana-metodia.
      * @param sana
@@ -173,10 +173,10 @@ public class Hakija {
     }
     
     /**
-     * Metodi yhdistää kahden hakusanan rivinumero-taulukot.
+     * Metodi yhdistää kahden hakusanan rivinumero-taulukot.<p>
      * Käy yhtä aikaa läpi molempia taulukoita 
      * ja valitsee aina pienemmän lisättäväksi kolmanteen tauluun.
-     * Jos sama tauluissa on sama rivinumero, se lisätään vain kerran.
+     * Jos tauluissa on sama rivinumero, se lisätään vain kerran.
      * Varaudutaan myös siihen, että tauluissa on 0-alkoita, jotka eivät ole rivinumeroita
      * vaan tyhjiä paikkoja dynaamisessa taulukossa.
      * Lopuksi lisää uuden taulun sanat-pinoon.
@@ -214,7 +214,7 @@ public class Hakija {
     }
     
     /**
-     * Metodi yhdistää kahden hakusanan yhteiset rivinumerot.
+     * Metodi kerää kahden hakusanan yhteiset rivinumerot kolmanteen tauluun.<p>
      * Lopuksi lisää uuden taulun sanat-pinoon.
      */
     private void yhdistaAnd() {

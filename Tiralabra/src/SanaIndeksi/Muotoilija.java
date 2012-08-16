@@ -7,7 +7,7 @@ package SanaIndeksi;
 import java.util.StringTokenizer;
 
 /**
- *
+ * Luokka huolehtii sanojen muotoilusta niitä tallennettaessa. 
  * @author heidi
  */
 public class Muotoilija {
