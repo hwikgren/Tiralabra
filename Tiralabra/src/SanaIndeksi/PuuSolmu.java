@@ -76,7 +76,7 @@ public class PuuSolmu {
         // Jos lapset-taulukko ei ole tyhjä.
         if (lapset != null) {
             //Haetaan indeksi, jossa haetun kirjaiminen lapsi on taulukossa.
-            int indeksi = hae(kirjain);
+            int indeksi = haeKirjain(kirjain);
             //Jos indeksi on positiivinen, lapsi löytyi ja palautetaan kyseinen solmu.
             if (indeksi > -1) {
                 return lapset[indeksi];
@@ -104,7 +104,7 @@ public class PuuSolmu {
         }
         //muuten haetaan kohta, johon uusi solmu tulee aakkosissa
         else {
-            int paikka = hae(kirjain);
+            int paikka = haeKirjain(kirjain);
             if (paikka < 0) {
                 paikka = -(paikka)-1;
                 for (int i=lastenMaara-1; i>=paikka; i--) {
@@ -125,12 +125,12 @@ public class PuuSolmu {
      * @param vika 
      */
     public void setRivi(int rivi, boolean vika) {
-        if (!hae(rivit, rivienMaara, rivi)) {
+        if (!haeRivi(rivit, rivienMaara, rivi)) {
             rivit = lisaaRivi(rivi, rivit, rivienMaara);
             rivienMaara++;
         }
         if (vika) {
-            if (!hae(sanaRivit, sanaRiveja, rivi)) {
+            if (!haeRivi(sanaRivit, sanaRiveja, rivi)) {
                 sanaRivit = lisaaRivi(rivi, sanaRivit, sanaRiveja);
                 sanaRiveja++;
             }
@@ -161,7 +161,7 @@ public class PuuSolmu {
      * @param kirjain
      * @return 
      */
-    private int hae(char kirjain) {
+    private int haeKirjain(char kirjain) {
         int alku = 0;
         int loppu = lastenMaara-1;
         int keski;
@@ -188,7 +188,7 @@ public class PuuSolmu {
      * @param nro
      * @return Palauttaa true, joa rivi löytyy.
      */
-    private boolean hae(int[] taulu, int lkm, int nro) {
+    private boolean haeRivi(int[] taulu, int lkm, int nro) {
         int alku = 0; 
         int loppu = lkm-1;
         int keski;

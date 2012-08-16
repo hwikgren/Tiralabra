@@ -18,75 +18,134 @@ import java.util.TreeMap;
  */
 public class Tallentaja {
     /**
-     * Toistaiseksi tiedoston rivit menevät vielä ArrayListiin.
+     * Tiedostojen rivit tallennetaan taulukkoon.
      */
-    public ArrayList<String> rivit;
+    public String[] rivit;
     
     /**
-     * Puu-olento;
+     * Puu-olento sanojen tallentamiseen;
      */
     public Puu sanaPuu;
+    /**
+     * Pitää kirjaa siitä montako riviä yhteensä on tallennettu.
+     */
+    int riviLaskin;
+    /**
+     * Pitää kirjaa rivit-taulukon kokonaiskoosta.
+     */
+    int koko;
+    /**
+     * Tiedosto-olento taulukko tiedostojen tietojen tallentamiseen.
+     */
+    Tiedosto[] tiedostot;
+    /**
+     * Pitää kirjaa tiedostot-taulu kokonaiskoosta.
+     */
+    int maara;
+    /**
+     * Pitää kirjaa tallennettujen tiedosto-olioiden lukumäärästä.
+     */
+    int lukumaara;
 
     /**
-     * Konstruktori luo tallentajan ja sille puun sanoja varten ja taulukon rivejä varten
+     * Konstruktori luo tallentajan ja sille puun sanoja varten, taulukon rivejä varten
+     * ja taulukon Tiedosto-olioita varten.
      */
     public Tallentaja() {
         sanaPuu = new Puu();
-        rivit = new ArrayList<String>();
+        rivit = new String[100];
+        koko = 100;
+        riviLaskin = 1;
+        tiedostot = new Tiedosto[10];
+        maara = 10;
+        lukumaara = 0;
     }
     
     /**
-     * Metodi tallentaa annetun tiedoston rivit ArrayListiin ja sanat puuhun.<p> 
-     * Rivit jaetaan sanoiksi StringTokenizerilla.
-     * Ennen sanojen lisäämistä metodi kutsuu trimmaa-metodia.
+     * Metodi tallentaa annetun tiedoston rivit taulukkoon ja sanat puuhun.<p> 
+     * Ensin luodaan Tiedosto-olento ja tallennetaan se tiedostot-tauluun.
+     * Asetetaan kyseisen tiedoston rivien aloitusmääräksi 1.
+     * Jos kyseessä on ensimmäinen tiedosto, lisätään rivit-tauluun tyhjä rivi indeksiin 0.
+     * Tiedosto käydään läpi rivi kerrallaa.
+     * Rivi tallennetaan rivit-taulukkoon.
+     * Sitten rivi jaetaan sanoiksi StringTokenizerilla.
+     * Ennen sanojen lisäämistä puuhun metodi kutsuu trimmaa-metodia.
      * @param tiedosto
      * @throws FileNotFoundException 
      */
-    public void tallenna(File tiedosto) throws FileNotFoundException {
-        Scanner syotto = new Scanner(tiedosto);
-        int riviLaskin = 0;
+    public void tallenna(String tiedostoNimi, File tiedosto) throws FileNotFoundException {
+        Tiedosto uusi = new Tiedosto(tiedostoNimi, riviLaskin);
+        //jos tiedostot-taulukko on täynnä, kasvatetaan sitä.
+        if (tiedostot.length == maara) {
+            kasvataTiedostot();
+        }
+        tiedostot[lukumaara++] = uusi;
+        
+        int tiedostonRivi = 1;
+        
         //Ensimmäinen rivi jätetään tyhjäksi
-        rivit.add(" ");
-        //Käydään teksti läpi rivi kerrallaa
+        if (rivit.length == 0) {
+            rivit[0] = " ";
+        }
+        //Luodaan tiedostonlukija.
+        Scanner syotto = new Scanner(tiedosto);
+        //Luodaan sanojen muotoilija.
+        Muotoilija muotoilija = new Muotoilija();
+        
+        //Käydään teksti läpi rivi kerrallaan
         while (syotto.hasNextLine()) {
             String rivi = syotto.nextLine();
-            rivit.add(++riviLaskin+". "+rivi);
-            String karsittuRivi = rivi.trim();
+            //jätetään tyhjät rivit väliin.
+            if (rivi.length() == 0) {
+                continue;
+            }
+            //jos rivit-taulukko on täynnä, kasvatetaan sitä.
+            if (riviLaskin == koko) {
+                kasvata();
+            }
+            //lisätään rivit-tiedostoon rivinumero (tiedoston sisäinen) ja rivin teksti
+            //kohtaan joka jatkuu edellisistä dokumenteista.
+            rivit[riviLaskin] = tiedostonRivi+++". "+rivi;
+            rivi = rivi.trim();
             //jaetaan rivi sanoiksi
-            StringTokenizer sanoittaja = new StringTokenizer(karsittuRivi);
+            StringTokenizer sanoittaja = new StringTokenizer(rivi);
             while (sanoittaja.hasMoreTokens()) {
                 String sana = sanoittaja.nextToken().toLowerCase();
-                String karsittuSana = trimmaa(sana);
+                String karsittuSana = muotoilija.trimmaa(sana);
                 sanaPuu.lisaaSana(karsittuSana, riviLaskin);
             }
+            //kasvateaan kokonaisrivien määrää.
+            riviLaskin++;
         }
+        //Asetetaan tiedosto-olion loppu-muuttujaksi rivien määrä tiedoston lopussa.
+        uusi.setLoppu(riviLaskin-1);
+        
+        System.out.println("\nTiedosto \""+tiedosto+"\" tallennettiin!");
     }
     
     /**
-     * Metodi poistaa annetun sanan alusta ja lopusta mahdolliset merkit, jotka eivät ole kirjaimia.
-     * <p>Tarkistaakseen onko merkki kirjain, metodi kutsuu eiKirjain-metodia.
-     * @param sana
-     * @return Palauttaa sanan ilman alussa tai lopussa olevia erikoismerkkejä.
+     * Metodi kaksinkertaistaa rivit-taulukon koon.
      */
-    private String trimmaa(String sana) {
-        String karsittuSana = sana.trim();
-        int alku = 0;
-        while (eiKirjain(karsittuSana.charAt(0))) {
-            karsittuSana = karsittuSana.substring(1);
+    private void kasvata() {
+        koko = 2*koko;
+        String[] uusi = new String[koko];
+        for (int i=0; i<rivit.length; i++) {
+            uusi[i] = rivit[i];
         }
-        while (eiKirjain(karsittuSana.charAt(karsittuSana.length()-1))) {
-            karsittuSana = karsittuSana.substring(0, karsittuSana.length()-1);
-        }
-        return karsittuSana;
+        rivit = uusi;
     }
     
     /**
-     * Metodi tarkastaa onko annettu merkki kirjain vai ei.
-     * @param merkki
-     * @return true jos merkki ei ole kirjain.
+     * Metodi kaksinkertaistaa tiedostot-taulukon koon.
      */
-    private boolean eiKirjain(char merkki) {
-        return ("abcdefghijklmnopqrstuvwxyzåäö".indexOf(merkki) ==-1);
+    private void kasvataTiedostot() {
+        maara = 2*maara;
+        Tiedosto[] uusi = new Tiedosto[maara];
+        for (int i=0; i<tiedostot.length; i++) {
+            uusi[i] = tiedostot[i];
+        }
+        tiedostot = uusi;
     }
+    
     
 }
