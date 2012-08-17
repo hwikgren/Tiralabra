@@ -120,7 +120,7 @@ public class Tallentaja {
         //Asetetaan tiedosto-olion loppu-muuttujaksi rivien määrä tiedoston lopussa.
         uusi.setLoppu(riviLaskin-1);
         
-        System.out.println("\nTiedosto \""+tiedosto+"\" tallennettiin!");
+        System.out.println("\nTiedosto '"+tiedosto+"' tallennettiin!");
     }
     
     /**

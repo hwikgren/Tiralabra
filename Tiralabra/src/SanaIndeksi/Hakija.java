@@ -57,7 +57,7 @@ public class Hakija {
         int[] rivit = hae(haettu);
         if (rivit != null && rivit[0] !=0) {
             int indeksi = 0;
-            System.out.println("\nHaulla \""+haettu+"\" löytyi seuraavat rivit:");
+            System.out.println("\nHaulla '"+haettu+"' löytyi seuraavat rivit:");
             //käydään läpi tiedostot
             for (int j=0; j<tallentaja.lukumaara; j++) {
                 if (rivit[indeksi]>=tiedostot[j].alku && rivit[indeksi]<=tiedostot[j].loppu) {
@@ -79,7 +79,7 @@ public class Hakija {
             }
         }
         else {
-            System.out.println("\nHaku \""+haettu+"\" ei tuottanut yhtään riviä!");
+            System.out.println("\nHaku '"+haettu+"' ei tuottanut yhtään riviä!");
         }
         
     }
