@@ -108,6 +108,9 @@ public class PuuSolmu implements Serializable {
         else {
             int paikka = haeKirjain(kirjain);
             if (paikka < 0) {
+                if (lastenMaara == lapset.length) {
+                    lapset = kasvataLapsia(lapset, lastenMaara);
+                }
                 paikka = -(paikka)-1;
                 for (int i=lastenMaara-1; i>=paikka; i--) {
                     lapset[i+1] = lapset[i];
@@ -225,10 +228,16 @@ public class PuuSolmu implements Serializable {
         }
         else {
             kasvu = maara +100;
-            System.out.println("rivien määrä: "+rivienMaara);
-        System.out.println("taulun koko: "+taulu.length);
         }
         int[] uusi = new int[kasvu];
+        for (int i=0; i<taulu.length; i++) {
+            uusi[i] = taulu[i];
+        }
+        return uusi;
+    }
+
+    private PuuSolmu[] kasvataLapsia(PuuSolmu[] taulu, int koko) {
+        PuuSolmu[] uusi = new PuuSolmu[koko*2];
         for (int i=0; i<taulu.length; i++) {
             uusi[i] = taulu[i];
         }
