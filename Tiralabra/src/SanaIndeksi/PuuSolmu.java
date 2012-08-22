@@ -4,11 +4,13 @@
  */
 package SanaIndeksi;
 
+import java.io.Serializable;
+
 /**
  * Luokka huolehtii puun solmuista ja niihin talletetuista rivitiedoista. 
  * @author heidi
  */
-public class PuuSolmu {
+public class PuuSolmu implements Serializable {
     /**
      * Solmuun liittyvä kirjain.
      */
@@ -216,7 +218,17 @@ public class PuuSolmu {
      * @return Palauttaa uuden taulun.
      */
     private int[] kasvata(int[] taulu, int maara) {
-        int[] uusi = new int[maara*2];
+        
+        int kasvu;
+        if (maara < Integer.MAX_VALUE/2) {
+            kasvu = maara*2;
+        }
+        else {
+            kasvu = maara +100;
+            System.out.println("rivien määrä: "+rivienMaara);
+        System.out.println("taulun koko: "+taulu.length);
+        }
+        int[] uusi = new int[kasvu];
         for (int i=0; i<taulu.length; i++) {
             uusi[i] = taulu[i];
         }

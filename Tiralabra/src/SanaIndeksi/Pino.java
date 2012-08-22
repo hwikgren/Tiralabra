@@ -4,11 +4,13 @@
  */
 package SanaIndeksi;
 
+import java.io.Serializable;
+
 /**
  * Luokka huolehtii hakusanojen hakutermien järjestyksestä.
  * @author heidi
  */
-public class Pino {
+public class Pino implements Serializable {
     /**
      * Pinon päällimmäinen solmu.
      */

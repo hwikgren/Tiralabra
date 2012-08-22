@@ -4,6 +4,7 @@
  */
 package SanaIndeksi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -12,7 +13,7 @@ import java.util.TreeMap;
  * Luokka hoitaa haetun sanan hakemisen puusta ja sitä vastaavien rivien tulostamisen. 
  * @author heidi
  */
-public class Hakija {
+public class Hakija implements Serializable {
     /**
      * Puuolento, jossa tiedostojen sanat.
      */
@@ -31,15 +32,16 @@ public class Hakija {
      * Pino hakusanoilla saatujen rivitaulukoiden tallentamiseen.
      */
     Pino sanat;
+    
+    int[] rivit;
         
     /**
      * Konstruktori luo Hakija-olennon, jolla on tieto käytetystä puusta ja ohjelman tallentaja-olennosta.
      */
-    public Hakija(Puu puu, Tallentaja tallentaja) {
-        this.puu = puu;
+    public Hakija(Tallentaja tallentaja) {
         this.tallentaja = tallentaja;
+        this.puu = this.tallentaja.sanaPuu;
     }
-    
     /**
      * Metodi printaa kaikki annetun sanan sisältävät rivit.<p>
      * Pyytää tallentajalta viimeisimmät rivit ja tiedosto-oliot sisältävät taulukot.
@@ -49,32 +51,57 @@ public class Hakija {
      * Jos sanaa ei löytynyt, kertoo siitä käyttäjälle.
      * @param haettu 
      */
-    public void printtaa(String haettu) {
+    public void printtaa(String haettu, String teksti) {
        
         String[] tekstit = tallentaja.rivit;
         Tiedosto[] tiedostot = tallentaja.tiedostot;
         
-        int[] rivit = hae(haettu);
+        rivit = hae(haettu);
         if (rivit != null && rivit[0] !=0) {
             int indeksi = 0;
+            int alku, loppu;
+            if (teksti != null) {
+                alku = tallentaja.getIndeksi(teksti);
+                loppu = alku+1;
+            }
+            else {
+                alku = 0;
+                loppu = tallentaja.lukumaara;
+            }
             System.out.println("\nHaulla '"+haettu+"' löytyi seuraavat rivit:");
             //käydään läpi tiedostot
-            for (int j=0; j<tallentaja.lukumaara; j++) {
-                if (rivit[indeksi]>=tiedostot[j].alku && rivit[indeksi]<=tiedostot[j].loppu) {
-                    System.out.println(tiedostot[j].nimi+":");
-                }
-                //käydään läpi rivinumerot joilla hakusana esiintyy
-                //alkaen indeksistä johon edellisellä kerralla päästiin 
-                //ja lopettaen kun riviä ei enää esiinny käsittelyssä olevassa tiedostossa.
-                for (int i=indeksi; i<rivit.length; i++) {
-                    if (rivit[i] > tiedostot[j].loppu) {
-                        break;
+            for (int j=alku; j<loppu; j++) {
+
+                if (teksti != null) {
+                    System.out.println(teksti+":");
+                    for (int i=indeksi; i<rivit.length; i++) {
+                    if (rivit[i] <tiedostot[j].alku || rivit[i] > tiedostot[j].loppu) {
+                        indeksi++;
                     }
                     else if (rivit[i] > 0) {
                         System.out.println(tekstit[rivit[i]]);
                         indeksi++;
                     }
                     else break;
+                }
+                }
+                else {
+                    if (rivit[indeksi]>=tiedostot[j].alku && rivit[indeksi]<=tiedostot[j].loppu) {
+                    System.out.println(tiedostot[j].nimi+":");
+                    } 
+                    //käydään läpi rivinumerot joilla hakusana esiintyy
+                    //alkaen indeksistä johon edellisellä kerralla päästiin 
+                    //ja lopettaen kun riviä ei enää esiinny käsittelyssä olevassa tiedostossa.
+                    for (int i=indeksi; i<rivit.length; i++) {
+                        if (rivit[i] > tiedostot[j].loppu) {
+                            break;
+                        }
+                        else if (rivit[i] > 0) {
+                            System.out.println(tekstit[rivit[i]]);
+                            indeksi++;
+                        }
+                        else break;
+                    }
                 }
             }
         }
@@ -95,7 +122,7 @@ public class Hakija {
      * @param haettu
      * @return Palauttaa sanat-pinossa jäljellä olevan yhden rivinumero-taulukon.
      */
-    private int[] hae(String haettu) {
+    public int[] hae(String haettu) {
         hakutermit = new Pino();
         sanat = new Pino();
         //käydään läpi hakusanat
@@ -161,7 +188,7 @@ public class Hakija {
      * @param sana
      * @return Palauttaa taulukon riveistä joilla kyseinen sana esiintyy.
      */
-    private int[] etsi(String sana) {
+    public int[] etsi(String sana) {
         int[] palautus;
         if (sana.charAt(sana.length()-1) == '*') {
             palautus = puu.etsiOsa(sana);
@@ -246,5 +273,7 @@ public class Hakija {
         sanat.push(null, yhdistetty);
     }
     
-    
+    public Tallentaja getTallentaja() {
+        return tallentaja;
+    }
 }

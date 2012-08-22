@@ -4,13 +4,14 @@
  */
 package SanaIndeksi;
 
+import java.io.Serializable;
 import java.util.StringTokenizer;
 
 /**
  * Luokka huolehtii sanojen muotoilusta niitä tallennettaessa. 
  * @author heidi
  */
-public class Muotoilija {
+public class Muotoilija implements Serializable {
 
     public Muotoilija() {
     }

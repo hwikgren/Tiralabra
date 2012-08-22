@@ -3,6 +3,7 @@ package SanaIndeksi;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -23,10 +24,11 @@ public class Tiralabra {
         System.out.println("***SANAKKO***");
         System.out.println("-------------");
         System.out.println("Päävalikko:");
-        System.out.println("1. Hae yhdellä sanalla");
-        System.out.println("2. Hae usealla sanalla");
-        System.out.println("3. Lisää tiedosto");
-        System.out.println("0. Poistu");
+        System.out.println(" 1. Hae kaikista tiedostoista");
+        System.out.println(" 2. Hae tietystä tiedostosta");
+        System.out.println(" 3. Lisää tiedosto");
+        System.out.println(" 4. Listaa tiedostot");
+        System.out.println(" 0. Lopeta");
 
         System.out.println("\nValitse numero:");
         int valinta = lukija.nextInt();
@@ -53,11 +55,18 @@ public class Tiralabra {
      */
     private static String odotaHakua() {
         Scanner odota = new Scanner(System.in);
-        System.out.println("\nVoit hakea yhdistää sanahakuja merkeillä & (ja) ja / (tai).\n"
+        System.out.println("\nSanakosta voit hakea rivejä yhdellä tai useammalla sanalla.\n"
+                + "Voit yhdistää sanahakuja merkeillä & (= ja) ja / (= tai).\n"
             + "Jos haet kolmea tai useampaa sanaa, ryhmitä hakusi suluilla.\n"
             + "Minkä tahansa sanoista voi katkaista *-merkillä.");
-        System.out.println("Anna haettavat sanat:");
+        System.out.println("Anna haetta(vat) sana(t):");
         return odota.nextLine().toLowerCase();
+    }
+    
+    private static String odotaTiedostoa() {
+        Scanner odota = new Scanner(System.in);
+        System.out.println("Anna tiedoston nimi, josta haluat hakea rivejä:");
+        return odota.nextLine();
     }
     
     private static Scanner lukija = new Scanner(System.in);
@@ -79,17 +88,28 @@ public class Tiralabra {
      * Ohjelman suoritus loppuu kun valinta on 0.
      * @throws FileNotFoundException 
      */
-    public static void main(String[] args) throws FileNotFoundException {
-        /**
-         * Luodaan tallentaja-olento.
-         */
-        Tallentaja tallentaja = new Tallentaja();
-        Puu puu = tallentaja.sanaPuu;
+    public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
+        Hakija hakija;
+        Tallentaja tallentaja;
         
-        /**
-         * Luodaan Hakija-olento.
-         */
-        Hakija hakija = new Hakija(puu, tallentaja);
+        Muistiin muisti = new Muistiin();
+        
+        if (muisti.lataaTiedot()) {
+            hakija = muisti.getHakija();
+            tallentaja = hakija.getTallentaja();
+        }
+        else {
+            /**
+            * Luodaan tallentaja-olento.
+            */
+            tallentaja = new Tallentaja();
+            Puu puu = tallentaja.sanaPuu;
+
+            /**
+            * Luodaan Hakija-olento.
+            */
+            hakija = new Hakija(tallentaja);
+        }
         int valinta;
         
         
@@ -98,20 +118,24 @@ public class Tiralabra {
             switch(valinta) {
                 
                 case 1:
-                    System.out.println("\nAnna haettava sana (voit katkaista sanan *-merkillä):");
-                    String haettu = lukija.next().toLowerCase();
+                    String haettu = odotaHakua();
                     /**
                     * Pyydetään Hakija-olentoa hakemaan ja printtaamaan rivit, joilla annettu sana esiintyy.
                     */
-                    hakija.printtaa(haettu);
+                    hakija.printtaa(haettu, null);
                     odotaEnteria();
                     break;
                 case 2:
+                    String teksti = odotaTiedostoa();
+                    if (!tallentaja.onko(teksti)) {
+                        System.out.println("Tiedostoa '"+teksti+"' ei löydy!");
+                        break;
+                    }
                     haettu = odotaHakua();
                     /**
                     * Pyydetään Hakija-olentoa hakemaan ja printtaamaan rivit, joilla annettu sana esiintyy.
                     */
-                    hakija.printtaa(haettu);
+                    hakija.printtaa(haettu, teksti);
                     odotaEnteria();
                     break;
                 case 3:
@@ -131,15 +155,19 @@ public class Tiralabra {
                     */
                     tallentaja.tallenna(tiedostoNimi, tiedosto);
                     break;
+                case 4:
+                    tallentaja.tulostaTiedostot();
+                    odotaEnteria();
+                    break;
                 case 0:
+                    muisti.talletaTiedot(hakija);
                     break;
                 default:
                     System.out.println("\nEi sallittu valinta!");
                     break;
             }
         } while (valinta !=0);
-        
-        
+    
     }
 }
 

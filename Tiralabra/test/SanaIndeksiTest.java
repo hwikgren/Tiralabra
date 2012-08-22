@@ -42,7 +42,7 @@ public class SanaIndeksiTest {
     public void setUp() throws FileNotFoundException {
         tallentaja = new Tallentaja();
         puu = tallentaja.sanaPuu;
-        hakija = new Hakija(puu, tallentaja);
+        hakija = new Hakija(tallentaja);
         System.setOut(new PrintStream(ulos));
     }
     
@@ -84,7 +84,7 @@ public class SanaIndeksiTest {
         
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
-        hakija.printtaa("dog");
+        hakija.printtaa("dog", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nHaulla 'dog' löytyi seuraavat rivit:\n"
                 + "Koe.txt:\n"
@@ -98,7 +98,7 @@ public class SanaIndeksiTest {
     public void sanaUseallaRivilla() throws FileNotFoundException {
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
-        hakija.printtaa("went");
+        hakija.printtaa("went", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nHaulla 'went' löytyi seuraavat rivit:\n"
                 + "Koe.txt:\n"
@@ -113,7 +113,7 @@ public class SanaIndeksiTest {
     public void hakuSanallaJotaEiLoydy() throws FileNotFoundException {
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
-        hakija.printtaa("joku");
+        hakija.printtaa("joku", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nHaku 'joku' ei tuottanut yhtään riviä!\n", ulos.toString() );
     }
@@ -125,7 +125,7 @@ public class SanaIndeksiTest {
     public void hakuSananOsalla() throws FileNotFoundException {
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
-        hakija.printtaa("him*");
+        hakija.printtaa("him*", null);
         assertTrue( ulos.toString().contains("stretched himself on the green bank") );
     }
     
@@ -136,7 +136,7 @@ public class SanaIndeksiTest {
     public void hakuSanallaJostaOsaLoytyy() throws FileNotFoundException {
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
-        hakija.printtaa("dogs");
+        hakija.printtaa("dogs", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nHaku 'dogs' ei tuottanut yhtään riviä!\n", ulos.toString() );
     }
@@ -146,7 +146,7 @@ public class SanaIndeksiTest {
     public void hakuKahdella() throws FileNotFoundException {
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
-        hakija.printtaa("him & her");
+        hakija.printtaa("him & her", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nHaulla 'him & her' löytyi seuraavat rivit:\n"
                 + "Koe.txt:\n"
@@ -158,7 +158,7 @@ public class SanaIndeksiTest {
     public void hakuKahdellaJaSuluilla() throws FileNotFoundException {
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
-        hakija.printtaa("(him & her)");
+        hakija.printtaa("(him & her)", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nHaulla '(him & her)' löytyi seuraavat rivit:\n"
                 + "Koe.txt:\n"
@@ -170,7 +170,7 @@ public class SanaIndeksiTest {
     public void hakuKolmella() throws FileNotFoundException {
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
-        hakija.printtaa("con* & (he / her)");
+        hakija.printtaa("con* & (he / her)", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nHaulla 'con* & (he / her)' löytyi seuraavat rivit:\n"
                 + "Koe.txt:\n"
@@ -182,7 +182,7 @@ public class SanaIndeksiTest {
     public void toinenHakuKolmella() throws FileNotFoundException {
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
-        hakija.printtaa("(con* & he) / her");
+        hakija.printtaa("(con* & he) / her", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nHaulla '(con* & he) / her' löytyi seuraavat rivit:\n"
                 + "Koe.txt:\n"
@@ -204,7 +204,7 @@ public class SanaIndeksiTest {
     public void hakuIlmanSulkuja() throws FileNotFoundException {
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
-        hakija.printtaa("con* & he / her");
+        hakija.printtaa("con* & he / her", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nHaulla 'con* & he / her' löytyi seuraavat rivit:\n"
                 + "Koe.txt:\n"
@@ -216,7 +216,7 @@ public class SanaIndeksiTest {
     public void hakuNeljalla() throws FileNotFoundException {
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
-        hakija.printtaa("((him/her)&(con*/green))");
+        hakija.printtaa("((him/her)&(con*/green))", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nHaulla '((him/her)&(con*/green))' löytyi seuraavat rivit:\n"
                 + "Koe.txt:\n"
@@ -228,7 +228,7 @@ public class SanaIndeksiTest {
     public void hakuVahemmillaSuluilla() throws FileNotFoundException {
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
-        hakija.printtaa("(him/her)&(con*/green)");
+        hakija.printtaa("(him/her)&(con*/green)", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nHaulla '(him/her)&(con*/green)' löytyi seuraavat rivit:\n"
                 + "Koe.txt:\n"
@@ -242,7 +242,7 @@ public class SanaIndeksiTest {
         tallentaja.tallenna("Koe.txt", tiedosto);
         tiedosto = new File("Prometheus.txt");
         tallentaja.tallenna("Prometheus.txt", tiedosto);
-        hakija.printtaa("sun");
+        hakija.printtaa("sun", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nTiedosto 'Prometheus.txt' tallennettiin!\n"
                 + "\nHaulla 'sun' löytyi seuraavat rivit:\n"
@@ -261,7 +261,7 @@ public class SanaIndeksiTest {
         tallentaja.tallenna("Koe.txt", tiedosto);
         tiedosto = new File("Prometheus.txt");
         tallentaja.tallenna("Prometheus.txt", tiedosto);
-        hakija.printtaa("went / came");
+        hakija.printtaa("went / came", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nTiedosto 'Prometheus.txt' tallennettiin!\n"
                 + "\nHaulla 'went / came' löytyi seuraavat rivit:\n"
@@ -275,5 +275,21 @@ public class SanaIndeksiTest {
                 + "42. help, and Prometheus, with the aid of Minerva, went up to heaven,\n"
                 + "105. To this came next in course the Brazen Age:\n"
                 + "112. their places came fraud and cunning, violence, and the wicked\n", ulos.toString() );
+    }
+    
+    @Test
+    public void hakuTietystaTiedostosta() throws FileNotFoundException {
+        tiedosto = new File("Koe.txt");
+        tallentaja.tallenna("Koe.txt", tiedosto);
+        tiedosto = new File("Prometheus.txt");
+        tallentaja.tallenna("Prometheus.txt", tiedosto);
+        hakija.printtaa("sun", "Prometheus.txt");
+        assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
+                + "\nTiedosto 'Prometheus.txt' tallennettiin!\n"
+                + "\nHaulla 'sun' löytyi seuraavat rivit:\n"
+                + "Prometheus.txt:\n"
+                + "5. together.  As yet no sun gave light to the world, nor did the\n"
+                + "43. lighted his torch at the chariot of the sun, and brought down\n"
+                + "95. The sun his annual course obliquely made,\n", ulos.toString() );
     }
 }

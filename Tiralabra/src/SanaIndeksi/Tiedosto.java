@@ -4,11 +4,13 @@
  */
 package SanaIndeksi;
 
+import java.io.Serializable;
+
 /**
  * Luokka huolehtii Tiedosto-olioista
  * @author heidi
  */
-public class Tiedosto {
+public class Tiedosto implements Serializable {
     /**
      * Tiedoston nimi
      */

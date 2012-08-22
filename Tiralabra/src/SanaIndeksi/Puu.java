@@ -4,11 +4,13 @@
  */
 package SanaIndeksi;
 
+import java.io.Serializable;
+
 /**
  * Luokka huolehtii sanojen ja rivien säilömisestä solmuihinsa. 
  * @author heidi
  */
-public class Puu {
+public class Puu implements Serializable {
     /**
      * Puun juurisolmu.
      */

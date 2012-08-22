@@ -4,11 +4,13 @@
  */
 package SanaIndeksi;
 
+import java.io.Serializable;
+
 /**
  * Luokka huolehtii pinon solmuihin liittyvistä sanoista ja rivinumero-taulukoista.
  * @author heidi
  */
-public class PinoSolmu {
+public class PinoSolmu implements Serializable {
     /**
      * Hakusana
      */
