@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class PinoSolmu implements Serializable {
     /**
-     * Hakusana
+     * Hakutermi.
      */
     String sana;
     /**
@@ -25,12 +25,12 @@ public class PinoSolmu implements Serializable {
     int[] rivit;
 
     /**
-     * Konstruktori luo solmun, jolla on hakusana ja rivi-taulukko sekä tieto edellisestä solmusta.<p>
+     * Konstruktori luo solmun, jolla on hakutermi ja rivi-taulukko sekä tieto edellisestä solmusta.<p>
      * Käytännössä solmuilla on joko hakutermi (and, or, ( ), jolloin solmu on hakutermipinossa 
      * tai haetun sanan rivitaulukko (sanat-pinossa). Toinen on aina null.
-     * @param sana
-     * @param rivit
-     * @param edellinen 
+     * @param sana String-muotoinen hakutermi.
+     * @param rivit Int-taulukko, jossa lista riveistä.
+     * @param edellinen Pinosolmu, joka jää tämän uuden solmun alle pinossa.
      */
     public PinoSolmu(String sana, int[] rivit, PinoSolmu edellinen) {
         this.sana = sana;

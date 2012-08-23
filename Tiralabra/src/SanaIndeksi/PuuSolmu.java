@@ -48,9 +48,9 @@ public class PuuSolmu implements Serializable {
      * Asettaa sanaRivien määrän nollaksi.
      * Jos kirjain on sanan viimeinen, lisää annetun rivin sanaRivit-taulukkoon
      * ja kasvattaa sanaRivien määrää.
-     * @param kirjain
-     * @param rivi
-     * @param vika 
+     * @param kirjain Char-muotoinen solmussa oleva kirjain.
+     * @param rivi Int-muotoinen tieto ensimmäisestä rivistä, jolla kirjain ja sen prefiksi sijaitsevat.
+     * @param vika Boolean-muotoinen tieto siitä, kirjain sanan viimeinen.
      */
     public PuuSolmu(char kirjain, int rivi, boolean vika) {
         this.kirjain = kirjain;
@@ -71,8 +71,8 @@ public class PuuSolmu implements Serializable {
      * Jos solmulla on lapsia, kutsuu binäärihakua saadakseen lapsen indeksin.
      * Palauttaa indeksiä vastaavan solmun lapset-taulukosta.
      * Jos kirjainta vastaavaa lasta ei löydy, palauttaa null.
-     * @param kirjain
-     * @return 
+     * @param kirjain Char-muotoinen kirjain, jonka sisältävää lapsisolmua etsitään.
+     * @return Palauttaa lapsisolmun, jolla haettu kirjain (tai null).
      */
     public PuuSolmu getLapsi(char kirjain) {
         // Jos lapset-taulukko ei ole tyhjä.
@@ -94,9 +94,9 @@ public class PuuSolmu implements Serializable {
      * Muuten kutsutaan binäärihakua. Jos solmulla ei vielä ole lasta jolla on haluttu kirjain,
      * siirretään tarvittava määrä solmuja ja sijoitetaan uusi solmu oikeaan paikkaan aakkosissa.
      * Suurennetaan lasten määrän laskuria.
-     * @param kirjain
-     * @param rivi
-     * @param vika 
+     * @param kirjain Char-kirjain jonka sisältävä lapsi halutaan asettaa.
+     * @param rivi Int-rivi, jossa kyseinen kirjain ja se prefiksi sijaitsevat.
+     * @param vika Boolean-muotoinen tieto siitä, kirjain sanan viimeinen.
      */
     public void setLapsi(char kirjain, int rivi, boolean vika) {  
         // jos lapsia ei ole ennestään
@@ -109,7 +109,7 @@ public class PuuSolmu implements Serializable {
             int paikka = haeKirjain(kirjain);
             if (paikka < 0) {
                 if (lastenMaara == lapset.length) {
-                    lapset = kasvataLapsia(lapset, lastenMaara);
+                    kasvataLapsia();
                 }
                 paikka = -(paikka)-1;
                 for (int i=lastenMaara-1; i>=paikka; i--) {
@@ -126,8 +126,8 @@ public class PuuSolmu implements Serializable {
      * Ensin kutsutaan rivin tarkistusta. Jos riviä ei vielä ole kyseisellä solmulla,
      * kutsutaan lisaaRivi-metodia ja kasvatetaan rivien määrää.
      * Jos parametri vika on true (solmu on sanan viimeinen), lisätään rivinumero myös sanaRivit-tauluun.
-     * @param rivi
-     * @param vika 
+     * @param rivi Int-rivi, jolla solmun kirjain ja sen prefiksi sijaitsee.
+     * @param vika Boolean-muotoinen tieto siitä, kirjain sanan viimeinen.
      */
     public void setRivi(int rivi, boolean vika) {
         if (!haeRivi(rivit, rivienMaara, rivi)) {
@@ -144,11 +144,11 @@ public class PuuSolmu implements Serializable {
     
     /**
      * Metodi lisää rivin solmun tauluun.
-     * Tarkistetaan ensin onko taulu täynnä, tarvittaessa kutustaan kasvata-metodia.
+     * Tarkistetaan ensin onko taulu täynnä, tarvittaessa kutsutaan kasvata-metodia.
      * Lisätään rivi taulukon viimeiseksi.
-     * @param rivi
-     * @param taulu
-     * @param lkm
+     * @param rivi Int-muotoinen rivinumero, joka halutaan lisätä solmulle.
+     * @param taulu Int-taulu, johon rivinumero halutaan lisätä.
+     * @param lkm Int-taulussa olevien rivien määrä.
      * @return Palauttaa taulun johon rivi on lisätty.
      */
     private int[] lisaaRivi(int rivi, int[] taulu, int lkm) {
@@ -163,8 +163,9 @@ public class PuuSolmu implements Serializable {
      * Binäärihaku tarkistaa onko solmulla jo lapsi, jolla haettu kirjain.<p>
      * Jos lapsi on olemassa palauttaa indeksin, jossa kyseinen lapsi on.
      * Muuten palauttaa sen indeksin negaation -1.
-     * @param kirjain
-     * @return 
+     * @param kirjain Char-kirjain, josta halutaan tietää onko sen sisältävä lapsi jo olemassa.
+     * @return Indeksi, jossa kirjain on lapset-taulukossa 
+     * tai negaatio-1 indeksistä, johon kirjain kuuluisi aakkosissa.
      */
     private int haeKirjain(char kirjain) {
         int alku = 0;
@@ -188,9 +189,9 @@ public class PuuSolmu implements Serializable {
     /**
      * Binäärihaku tarkistaa onko annetussa taulussa jo haettu rivinumero.<p>
      * Käydään läpi vain taulussa todella olevat rivit, siksi parametrina saadaan taulun alkioiden lukumäärä.
-     * @param taulu
-     * @param lkm
-     * @param nro
+     * @param taulu Int-taulu, josta tarkistetaan rivinumero.
+     * @param lkm Kyseisen taulun rivien lukumäärä.
+     * @param nro Rivinumero, jota etsitään.
      * @return Palauttaa true, joa rivi löytyy.
      */
     private boolean haeRivi(int[] taulu, int lkm, int nro) {
@@ -214,11 +215,12 @@ public class PuuSolmu implements Serializable {
     
     /**
      * Metodi kaksinkertaistaa annetun taulun koon.<p>
+     * Käytetään rivit ja sanaRivit-taulukoiden kasvattamiseen.
      * Parametrina saadaa myös taulun koko ennen kasvatusta.
      * Kopioidaan taulun alkiot uuteen isompaan tauluun.
-     * @param taulu
-     * @param maara
-     * @return Palauttaa uuden taulun.
+     * @param taulu Int-taulu joka halutaan kasvattaa.
+     * @param maara Kyseisen taulun nykyinen koko.
+     * @return Palauttaa kasvatetun taulun.
      */
     private int[] kasvata(int[] taulu, int maara) {
         
@@ -236,11 +238,14 @@ public class PuuSolmu implements Serializable {
         return uusi;
     }
 
-    private PuuSolmu[] kasvataLapsia(PuuSolmu[] taulu, int koko) {
-        PuuSolmu[] uusi = new PuuSolmu[koko*2];
-        for (int i=0; i<taulu.length; i++) {
-            uusi[i] = taulu[i];
+    /**
+     * Metodi kaksinkertaistaa lapset-taulukon koon.
+     */
+    private void kasvataLapsia() {
+        PuuSolmu[] uusi = new PuuSolmu[lastenMaara*2];
+        for (int i=0; i<lapset.length; i++) {
+            uusi[i] = lapset[i];
         }
-        return uusi;
+        lapset = uusi;
     }
 }

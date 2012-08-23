@@ -64,4 +64,13 @@ public class PuuTest {
         puu.lisaaSana("node", 1);
         assertTrue( puu.etsiOsa("tru*") == null);
     }
+    
+    @Test
+    public void kasvatetaanLapsia() {
+        String merkit = "qwertyuiopåasdfghjklöäzxcvbnm,,-><;:_'*^¨´`?0=9)8(7/6&5%4€3#21!©@£$∞§|[[]≈±";
+        for (int i=0; i<merkit.length(); i++) {
+            puu.juuri.setLapsi(merkit.charAt(i), i, true);
+        }
+        assertTrue( puu.juuri.lapset.length > 40);
+    }
 }

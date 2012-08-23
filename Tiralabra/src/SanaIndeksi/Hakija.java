@@ -37,11 +37,13 @@ public class Hakija implements Serializable {
         
     /**
      * Konstruktori luo Hakija-olennon, jolla on tieto käytetystä puusta ja ohjelman tallentaja-olennosta.
+     * @param tallentaja Tallentaja-olio.
      */
     public Hakija(Tallentaja tallentaja) {
         this.tallentaja = tallentaja;
         this.puu = this.tallentaja.sanaPuu;
     }
+    
     /**
      * Metodi printaa kaikki annetun sanan sisältävät rivit.<p>
      * Pyytää tallentajalta viimeisimmät rivit ja tiedosto-oliot sisältävät taulukot.
@@ -49,7 +51,8 @@ public class Hakija implements Serializable {
      * Printaa jokaisen tiedoston nimen jossa hakusana(t) esiintyy 
      * ja sen perään taulukosta saamaansa listaa vastaavat rivit,jotka esiintyvät kyseisessä tiedostossa.
      * Jos sanaa ei löytynyt, kertoo siitä käyttäjälle.
-     * @param haettu 
+     * @param haettu String-muotoinen hakusana.
+     * @param teksti tiedoston nimi, josta halutaan hakea (null jos haetaan kaikista).
      */
     public void printtaa(String haettu, String teksti) {
        
@@ -59,47 +62,59 @@ public class Hakija implements Serializable {
         rivit = hae(haettu);
         if (rivit != null && rivit[0] !=0) {
             int indeksi = 0;
-            int alku, loppu;
+            int alku;
+            int loppu;
+            //Asetettaan rivit, joiden välistä printataan.
+            //Jos parametri teksti ei ole tyhjä, haetaan tekstin indeksi tallentajan tiedostot-taulusta.
             if (teksti != null) {
                 alku = tallentaja.getIndeksi(teksti);
                 loppu = alku+1;
             }
+            //muuten käydään läpi kaikki tiedostot;
             else {
                 alku = 0;
                 loppu = tallentaja.lukumaara;
             }
             System.out.println("\nHaulla '"+haettu+"' löytyi seuraavat rivit:");
-            //käydään läpi tiedostot
+            
+            
+            //käydään läpi tiedosto tai tiedostot
             for (int j=alku; j<loppu; j++) {
-
+                //jos tiedosto on määritelty
                 if (teksti != null) {
                     System.out.println(teksti+":");
-                    for (int i=indeksi; i<rivit.length; i++) {
-                    if (rivit[i] <tiedostot[j].alku || rivit[i] > tiedostot[j].loppu) {
-                        indeksi++;
+                    //käydään läpi saatu lista riveistä joilla hakusana esiintyy
+                    for (int i=0; i<rivit.length; i++) {
+                        //jos rivi on ei osu tiedoston riveihin, jatketaan seuraavaan riviin
+                        if (rivit[i] <tiedostot[j].alku || rivit[i] > tiedostot[j].loppu) {
+                            continue;
+                        }
+                        //jos rivinumero on suurempi kuin nolla, printataan rivin teksti
+                        else if (rivit[i] > 0) {
+                            System.out.println(tekstit[rivit[i]]);
+                        }
+                        //jos rivinumero on nolla lopetetaan
+                        else break;
                     }
-                    else if (rivit[i] > 0) {
-                        System.out.println(tekstit[rivit[i]]);
-                        indeksi++;
-                    }
-                    else break;
                 }
-                }
+                //jos haetaan kaikista tiedostostoista
                 else {
-                    if (rivit[indeksi]>=tiedostot[j].alku && rivit[indeksi]<=tiedostot[j].loppu) {
-                    System.out.println(tiedostot[j].nimi+":");
-                    } 
+                    //jokaisen tiedoston osalta printataan ensin sen nimi.
+                        System.out.println(tiedostot[j].nimi+":");
+                    //} 
                     //käydään läpi rivinumerot joilla hakusana esiintyy
                     //alkaen indeksistä johon edellisellä kerralla päästiin 
-                    //ja lopettaen kun riviä ei enää esiinny käsittelyssä olevassa tiedostossa.
                     for (int i=indeksi; i<rivit.length; i++) {
+                        //jos rivinumero on isompi kuin kyseisen tiedoston loppu, lopetetaan
                         if (rivit[i] > tiedostot[j].loppu) {
                             break;
                         }
+                        //muuten jos rivinumero on isompi kuin 0, printataan rivin teksti
                         else if (rivit[i] > 0) {
                             System.out.println(tekstit[rivit[i]]);
                             indeksi++;
                         }
+                        //jos rivinumero on 0, siirrytään seuraavaan tiedostoon
                         else break;
                     }
                 }
@@ -119,7 +134,7 @@ public class Hakija implements Serializable {
      * Jos käsittelyssä oleva char on loppu-sulku kutsutaan haeRivit-metodia.
      * Jos hakutermit-pinossa on vielä termejä hakulausekkeen käsittelyn jälkeen, 
      * kutsutaan haeRivit-metodia kunnes se on tyhjä.
-     * @param haettu
+     * @param haettu String-muotoinen hakusana
      * @return Palauttaa sanat-pinossa jäljellä olevan yhden rivinumero-taulukon.
      */
     public int[] hae(String haettu) {
@@ -185,7 +200,7 @@ public class Hakija implements Serializable {
      * Metodi päättää mitä puun hakumetodia kutsutaan.<p>
      * Jos haetaan sanan osaa (sanan perässä on *), kutsuu  etsiOsa-metodia.
      * Muuten kutsuu etsiSana-metodia.
-     * @param sana
+     * @param sana Yksittäinen sana, jonka rivejä haetaan.
      * @return Palauttaa taulukon riveistä joilla kyseinen sana esiintyy.
      */
     public int[] etsi(String sana) {
@@ -273,6 +288,10 @@ public class Hakija implements Serializable {
         sanat.push(null, yhdistetty);
     }
     
+    /**
+     * Getteri
+     * @return palauttaa Tallentaja-olennon, joka hakijalla on käytössä.
+     */
     public Tallentaja getTallentaja() {
         return tallentaja;
     }

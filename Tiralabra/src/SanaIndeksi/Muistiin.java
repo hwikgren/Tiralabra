@@ -7,16 +7,31 @@ package SanaIndeksi;
 import java.io.*;
 
 /**
- *
+ * Luokka huolehtii tiedon lataamisesta ohjelman käynnistyessä ja sen tallentamista ohjelman lopettaessa. 
  * @author heidi
  */
 public class Muistiin {
+    /**
+     * Hakija-olento joka talletettaan tiedostoon.
+     */
     Hakija hakija;
 
+    /**
+     * Kostruktori luo tyhjän Muistiin-olion.
+     */
     public Muistiin() {
     }
     
-    public boolean lataaTiedot() throws IOException, ClassNotFoundException {
+    /**
+     * Metodi lataa Hakija-olennon tiedostosta.<p>
+     * Ensin luo tiedoston, jolla tallennustiedoston nimi.
+     * Sitten tarkistaa, että tiedosto on olemassa. Muuten luo uuden tiedoston.
+     * Jos tiedosto ei ole tyhjä, lukee Hakija-olennon tiedostosta.
+     * @return Hakija-olio tai null.
+     * @throws IOException
+     * @throws ClassNotFoundException 
+     */
+    public Hakija lataaTiedot() throws IOException, ClassNotFoundException {
         File f = new File("tiedot.ser");
         if (!f.exists()) {
             f.createNewFile();
@@ -30,7 +45,7 @@ public class Muistiin {
                 ois = new ObjectInputStream(fis);
                 hakija = (Hakija)ois.readObject();
                 ois.close();
-                return true;
+                return hakija;
             }
             catch(IOException ex) {
                 ex.printStackTrace();
@@ -39,13 +54,14 @@ public class Muistiin {
                 ex.printStackTrace();
             }
         }
-        return false;
+        return null;
     }
     
-    public Hakija getHakija() {
-        return hakija;
-    }
-    
+    /**
+     * Metodi tallentaa Hakija-olion tiedostoon.
+     * @param hakija Hakija-olio, joka tuntee kaikki muut luokat ohjelmassa suoraan tai välillisesti,
+     * paitsi Tiralabran, jossa ei ole mitään tallennettuja tietoja.
+     */
     public void talletaTiedot(Hakija hakija) {
         FileOutputStream fos = null;
         ObjectOutputStream ous = null;

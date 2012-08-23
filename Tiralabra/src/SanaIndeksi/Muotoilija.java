@@ -4,6 +4,7 @@
  */
 package SanaIndeksi;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.StringTokenizer;
 
@@ -13,13 +14,16 @@ import java.util.StringTokenizer;
  */
 public class Muotoilija implements Serializable {
 
+    /**
+     * Konstruktori luo Muotoilija-olion
+     */
     public Muotoilija() {
     }
     
     /**
      * Metodi poistaa annetun sanan alusta ja lopusta mahdolliset merkit, jotka eivät ole kirjaimia.
      * <p>Tarkistaakseen onko merkki kirjain, metodi kutsuu eiKirjain-metodia.
-     * @param sana
+     * @param sana String-muotoinen sana, jota halutaan muotoilla.
      * @return Palauttaa sanan ilman alussa tai lopussa olevia erikoismerkkejä.
      */
     public String trimmaa(String sana) {
@@ -35,12 +39,14 @@ public class Muotoilija implements Serializable {
     }
     
     /**
-     * Metodi tarkastaa onko annettu merkki kirjain vai ei.
-     * @param merkki
+     * Metodi tarkastaa onko annettu merkki kirjain.
+     * @param merkki Char-merkki, josta halutaan tietää onko se kirjain vai ei.
      * @return true jos merkki ei ole kirjain.
      */
     private boolean eiKirjain(char merkki) {
         return ("abcdefghijklmnopqrstuvwxyzåäö".indexOf(merkki) ==-1);
     }
+    
+    
     
 }

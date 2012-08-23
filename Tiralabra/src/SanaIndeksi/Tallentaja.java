@@ -1,5 +1,7 @@
 package SanaIndeksi;
 
+import SanaIndeksi.Muotoilija;
+import SanaIndeksi.Puu;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
@@ -64,14 +66,18 @@ public class Tallentaja implements Serializable {
     
     /**
      * Metodi tallentaa annetun tiedoston rivit taulukkoon ja sanat puuhun.<p> 
-     * Ensin luodaan Tiedosto-olento ja tallennetaan se tiedostot-tauluun.
+     * Jos samannimistä tiedostoa ei vielä ole tiedostot-taulukossa, 
+     * luodaan Tiedosto-olento ja tallennetaan se tiedostot-tauluun.
      * Asetetaan kyseisen tiedoston rivien aloitusmääräksi 1.
      * Jos kyseessä on ensimmäinen tiedosto, lisätään rivit-tauluun tyhjä rivi indeksiin 0.
      * Tiedosto käydään läpi rivi kerrallaa.
      * Rivi tallennetaan rivit-taulukkoon.
      * Sitten rivi jaetaan sanoiksi StringTokenizerilla.
      * Ennen sanojen lisäämistä puuhun metodi kutsuu trimmaa-metodia.
-     * @param tiedosto
+     * Lopuksi kerrotaa käyttäjälle, että tiedosto on tallennettu onnistuneesti.
+     * Jos senniminen tiedosto löytyi jo, kerrotaan käyttäjälle, että tiedostoa ei tallennettu.
+     * @param tiedostoNimi String-muotoinen tallennettavan tiedoston nimi
+     * @param tiedosto File-olento tallennettavasta tiedostosta.
      * @throws FileNotFoundException 
      */
     public void tallenna(String tiedostoNimi, File tiedosto) throws FileNotFoundException {
@@ -122,20 +128,38 @@ public class Tallentaja implements Serializable {
             //Asetetaan tiedosto-olion loppu-muuttujaksi rivien määrä tiedoston lopussa.
             uusi.setLoppu(riviLaskin-1);
 
-            System.out.println("\nTiedosto '"+tiedosto+"' tallennettiin!");
+            System.out.println("\nTiedosto '"+tiedostoNimi+"' tallennettiin!");
         }
         else {
-            System.out.println("Tiedosto '"+tiedostoNimi+"' on jo olemassa.\n"
+            System.out.println("\nTiedosto '"+tiedostoNimi+"' on jo olemassa.\n"
                     + "Tiedostoa ei tallennettu!");
         }
     }
     
+    /**
+     * Metodi printtaa kaikkien tiedostojen nimet.<p>
+     * Jos tiedostoja ei ole, kerrotaan asiasta käyttäjälle.
+     * Muuten printataan kunkin tiedostot-taulussa olevan olion nimi.
+     */
     public void tulostaTiedostot() {
-        for (int i=0; i<lukumaara; i++) {
-            System.out.println(tiedostot[i].nimi);
+        System.out.println("");
+        if (lukumaara == 0) {
+            System.out.println("Ei tallennettuja tiedostostoja!");
         }
+        else {
+            System.out.println("Tiedostot:");
+            for (int i=0; i<lukumaara; i++) {
+                System.out.println(tiedostot[i].nimi);
+            }
+        }
+        System.out.println("");
     }
     
+    /**
+     * Getteri
+     * @param nimi String-muotoinen tiedoston nimi,
+     * @return Palauttaa sen tiedoston indeksin tiedostot-taulukossa, jolla on haettu nimi (tai -1)
+     */
     public int getIndeksi(String nimi) {
         for (int i=0; i<lukumaara; i++) {
             if (tiedostot[i].nimi.equals(nimi)) {
@@ -145,6 +169,12 @@ public class Tallentaja implements Serializable {
         return -1;
     }
     
+    /**
+     * Metodi tarkistaa onko haetun niminen tiedosto jo tiedostot-taulussa.<p>
+     * Kutsuu getIndeksi-metodia. Jos tiedoston indeksi on -1, palauttaa false.
+     * @param nimi String-muotoinen tiedoston nimi.
+     * @return true jos tiedosto löytyy.
+     */
     public boolean onko(String nimi) {
         if (getIndeksi(nimi) >-1) {
             return true;

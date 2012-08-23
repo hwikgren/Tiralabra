@@ -24,9 +24,11 @@ public class Pino implements Serializable {
     }
     
     /**
-     * Metodi lisää pinon päälle uuden solmun.
-     * @param sana
-     * @param rivit 
+     * Metodi lisää pinon päälle uuden solmun.<p>
+     * Käytännössä toinen parametreista on aina null.
+     * Luo uuden solmun, jolla annetut parametrit, ja merkitsee sen pinon päällimmäisenä olevaksi.
+     * @param sana String-muotinen hakutermi.
+     * @param rivit Int-taulukko jossa lista riveistä.
      */
     public void push(String sana, int[] rivit) {
         PinoSolmu uusi = new PinoSolmu(sana, rivit, huippu);
@@ -34,8 +36,9 @@ public class Pino implements Serializable {
     }
     
     /**
-     * Metodi poistaa pinosta päällimmäiset solmun.
-     * @return 
+     * Metodi poistaa pinosta päällimmäiset solmun.<p>
+     * Asettaa poistettavan solmun edellisen päällimmäiseksi.
+     * @return PinosSolmu, joka poistettiin pinosta.
      */
     public PinoSolmu pop() {
         PinoSolmu popattava = huippu;

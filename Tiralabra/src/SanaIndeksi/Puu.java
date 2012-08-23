@@ -17,7 +17,7 @@ public class Puu implements Serializable {
     public PuuSolmu juuri;
 
     /**
-     * Konstruktori luo puulle tyhjän juurisolmun.
+     * Konstruktori luo puun, jolla on tyhjä juurisolmu.
      */
     public Puu() {
         juuri = new PuuSolmu(' ', 0, false);
@@ -31,8 +31,8 @@ public class Puu implements Serializable {
      * Jos lapsi löytyy, kutsuu lapsisolmun setRivi-metodia.
      * Jos lasta ei ollut ennestään, kutsuu solmun setLapsi-metodia.
      * Siirtyy lapsi solmuun ja seuraavaan kirjaimeen.
-     * @param sana
-     * @param rivi 
+     * @param sana String-muotoinen sana, joka halutaan lisätä puuhun.
+     * @param rivi Int-rivi, jolla sana esiintyy.
      */
     public void lisaaSana(String sana, int rivi) {
         //käsittelyssä ensin juuri.
@@ -64,9 +64,9 @@ public class Puu implements Serializable {
      * Metodi hakee listan riveistä, joilla esiintyy haettu kokonainen sana.<p>
      * Lähtee liikkelle juurisolmusta.
      * Jos lapset loppuvat ennen kuin haetun sanan kirjaimet, palauttaa null.
-     * Muuten palauttaa viimeisen kirjaimen listan riveistä, jolla sana esiintyy.
-     * @param sana
-     * @return 
+     * Muuten palauttaa viimeisen kirjaimen kohdalla olevan listan riveistä, jolla sana esiintyy.
+     * @param sana String-muotoinen sana, jota etsitään puusta.
+     * @return Int-taulukko, joka on viimeisen kirjaimen solmussa oleva sanaRivit-taulu.
      */
     public int[] etsiSana(String sana) {
         PuuSolmu nyt = juuri;
@@ -93,8 +93,8 @@ public class Puu implements Serializable {
      * (paitsi viimeisen joka on *).
      * Jos lapset loppuvat ennen kuin haetun sanan kirjaimet, palauttaa null.
      * Muuten palauttaa viimeisen kirjaimen listan riveistä, jolla sana ja kaikki sen "lapsisanat" esiintyvät.
-     * @param sana
-     * @return 
+     * @param sana String-muotoinen sana, jota etsitään puusta.
+     * @return Int-taulukko, joka on viimeisen kirjaimen solmussa oleva rivit-taulu.
      */
     public int[] etsiOsa(String sana) {
         PuuSolmu nyt = juuri;

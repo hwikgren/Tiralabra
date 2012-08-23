@@ -4,6 +4,7 @@ package SanaIndeksi;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 
@@ -15,9 +16,11 @@ import java.util.*;
  */
 public class Tiralabra {
     
+    private static Scanner lukija = new Scanner(System.in);
+    
     /**
      * Metodi printtaa päävalikon ja lukee käyttäjän valinnan.
-     * @return käyttäjän valinta.
+     * @return käyttäjän valitsema numero.
      */
     private static int paavalikko() {
         System.out.println("");
@@ -28,6 +31,7 @@ public class Tiralabra {
         System.out.println(" 2. Hae tietystä tiedostosta");
         System.out.println(" 3. Lisää tiedosto");
         System.out.println(" 4. Listaa tiedostot");
+        //System.out.println(" 5. Hae tiedostot, jossa haettu sana");
         System.out.println(" 0. Lopeta");
 
         System.out.println("\nValitse numero:");
@@ -35,67 +39,42 @@ public class Tiralabra {
         return valinta;
     }
     
-    /**
-     * Metodi pysäyttää do-while -loopin ja odottaa, että käyttäjä painaa enteriä<p>
-     * Luodaan ensin uusi Scanner ja kehoitetaan käyttäjää painamaan enteriä päästäkseen eteenpäin.
-     * Uudella scannerilla luetaan rivi. (Do-while -loopissa ei pysty käyttämään nextLine()a,
-     * koska looppi tulkitsee sen painallukseksi ja jatkaa matkaa):
-     */
-    private static void odotaEnteria() {
-        Scanner odota = new Scanner(System.in);
-        System.out.print("\nPaina enter palataksesi päävalikkoon");
-        odota.nextLine();
-    }
-    
-    /**
-     * Metodi pysäyttää do-while -loopin ja kysyy käyttäjältä hakusanoja.<p>
-     * Luodaan uusi Scanner ja kysytään hakusanoja.
-     * Uusi scanner lukee rivin.
-     * @return Käyttäjän hakusanat.
-     */
-    private static String odotaHakua() {
-        Scanner odota = new Scanner(System.in);
-        System.out.println("\nSanakosta voit hakea rivejä yhdellä tai useammalla sanalla.\n"
-                + "Voit yhdistää sanahakuja merkeillä & (= ja) ja / (= tai).\n"
-            + "Jos haet kolmea tai useampaa sanaa, ryhmitä hakusi suluilla.\n"
-            + "Minkä tahansa sanoista voi katkaista *-merkillä.");
-        System.out.println("Anna haetta(vat) sana(t):");
-        return odota.nextLine().toLowerCase();
-    }
-    
-    private static String odotaTiedostoa() {
-        Scanner odota = new Scanner(System.in);
-        System.out.println("Anna tiedoston nimi, josta haluat hakea rivejä:");
-        return odota.nextLine();
-    }
-    
-    private static Scanner lukija = new Scanner(System.in);
     
     /**
      * Main-metodi.<p>
-     * Luo aluksi Tallentaja- ja Hakija-olennot.
+     * Luo aluksi Tallentaja- ja Hakija-oliot.
      * Näytetään käyttäjälle päävalikko ja reagoidaan valintaan.<br>
      * 
-     * Jos käyttäjä valitsee 1 (hae yhdessä sanalla), kysytään sanaan ja suoritetaan haku.
+     * Jos käyttäjä valitsee 1 (hae kaikista tiedostoista), kysytään sanaan ja suoritetaan haku.
      * Hakutulosten näkyessä, kutsutaan odotaEnteria-metodia.<br>
      * 
-     * Jos valinta on 2 (hae usealla sanalla), haetaan hakusana kutsumalla odotaHakua-metodia.
+     * Jos valinta on 2 (hae yhdestä tiedostosta), haetaan tiedosto, 
+     * josta haku tehdään kutsumalla odottajan odotaTiedostoa-metodia. Sitten haetaan hakusana kutsumalla odotaHakua-metodia.
      * Suoritetaan haku ja kutsutaan odotaEnteria-metodia.<br>
      * 
      * Jos valinta on 3 (tallenna tiedosto), kysytään tiedoston nimeä 
-     * ja tarkastetaan, että tiedosto löytyy. Suoritetaan talletus.<br>
+     * ja tarkastetaan, että tiedosto löytyy. Kutsutaan tallentajan talenna-metodia.<br>
      * 
-     * Ohjelman suoritus loppuu kun valinta on 0.
-     * @throws FileNotFoundException 
+     * Jos valinta on 4 (listaa tiedostot), pyydetään tallentajaa printtaamaan tiedostojen nimet.
+     * Kutsutaan odotaEnteria-metodia.
+     * 
+     * Jos valinta on 0 (lopeta), pyydetään muistiin-oliota tallentamaan.
+     * Ohjelman suoritus loppuu.
+     * @param args
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws ClassNotFoundException 
      */
     public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
         Hakija hakija;
         Tallentaja tallentaja;
+        Odottaja odottaja = new Odottaja();
         
         Muistiin muisti = new Muistiin();
-        
-        if (muisti.lataaTiedot()) {
-            hakija = muisti.getHakija();
+        //Pyydetään Muistiin-oliolta lataamaan hakijan tiedot tiedostosta.
+        hakija = muisti.lataaTiedot();
+        //hakija ei ole tyhjä, haetaan sen tallentaja-olio.
+        if (hakija != null) {
             tallentaja = hakija.getTallentaja();
         }
         else {
@@ -118,29 +97,30 @@ public class Tiralabra {
             switch(valinta) {
                 
                 case 1:
-                    String haettu = odotaHakua();
+                    String haettu = odottaja.odotaHakua();
                     /**
                     * Pyydetään Hakija-olentoa hakemaan ja printtaamaan rivit, joilla annettu sana esiintyy.
                     */
                     hakija.printtaa(haettu, null);
-                    odotaEnteria();
+                    odottaja.odotaEnteria();
                     break;
                 case 2:
-                    String teksti = odotaTiedostoa();
+                    String teksti = odottaja.odotaTiedostoa();
                     if (!tallentaja.onko(teksti)) {
                         System.out.println("Tiedostoa '"+teksti+"' ei löydy!");
                         break;
                     }
-                    haettu = odotaHakua();
+                    haettu = odottaja.odotaHakua();
                     /**
                     * Pyydetään Hakija-olentoa hakemaan ja printtaamaan rivit, joilla annettu sana esiintyy.
                     */
                     hakija.printtaa(haettu, teksti);
-                    odotaEnteria();
+                    odottaja.odotaEnteria();
                     break;
                 case 3:
                     System.out.println("\nAnna talletettavan tiedoston nimi:");
                     String tiedostoNimi = lukija.next();
+                    
                     File tiedosto = new File(tiedostoNimi);
                     /**
                     * Tarkistetaan onko talletettava tiedosto olemassa.
@@ -157,7 +137,7 @@ public class Tiralabra {
                     break;
                 case 4:
                     tallentaja.tulostaTiedostot();
-                    odotaEnteria();
+                    odottaja.odotaEnteria();
                     break;
                 case 0:
                     muisti.talletaTiedot(hakija);
@@ -169,5 +149,9 @@ public class Tiralabra {
         } while (valinta !=0);
     
     }
+
+    
+
+    
 }
 

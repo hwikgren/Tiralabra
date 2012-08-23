@@ -26,8 +26,8 @@ public class Tiedosto implements Serializable {
 
     /**
      * Konstruktori luo Tiedosto-olion, jolla on nimi ja ensimmäisen rivin numero.
-     * @param nimi
-     * @param alku 
+     * @param nimi String-muotoinen tiedoston nimi.
+     * @param alku Tiedoston int-muotoinen ensimmäisen rivin numero.
      */
     public Tiedosto(String nimi, int alku) {
         this.nimi = nimi;
@@ -36,7 +36,7 @@ public class Tiedosto implements Serializable {
     
     /**
      * Setteri asettaa oliolle viimeisen rivin numeron.
-     * @param loppu 
+     * @param loppu Int-muotoinen tiedoston viimeisen rivin numero.
      */
     public void setLoppu(int loppu) {
         this.loppu = loppu;
