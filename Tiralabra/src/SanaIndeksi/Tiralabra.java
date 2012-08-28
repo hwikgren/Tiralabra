@@ -75,7 +75,7 @@ public class Tiralabra {
         hakija = muisti.lataaTiedot();
         //hakija ei ole tyhjä, haetaan sen tallentaja-olio.
         if (hakija != null) {
-            tallentaja = hakija.getTallentaja();
+            tallentaja = hakija.tallentaja;
         }
         else {
             /**

@@ -58,6 +58,7 @@ public class Tallentaja implements Serializable {
         sanaPuu = new Puu();
         rivit = new String[100];
         koko = 100;
+        //Ensimmäinen rivi rivit-taulussa jätetään tyhjäksi
         riviLaskin = 1;
         tiedostot = new Tiedosto[10];
         maara = 10;
@@ -91,10 +92,6 @@ public class Tallentaja implements Serializable {
 
             int tiedostonRivi = 1;
 
-            //Ensimmäinen rivi jätetään tyhjäksi
-            if (rivit.length == 0) {
-                rivit[0] = " ";
-            }
             //Luodaan tiedostonlukija.
             Scanner syotto = new Scanner(tiedosto);
             //Luodaan sanojen muotoilija.

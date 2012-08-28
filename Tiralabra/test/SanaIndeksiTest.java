@@ -74,11 +74,67 @@ public class SanaIndeksiTest {
      */
     @Test
     public void kahdenTallennusToimii() throws FileNotFoundException {
+        tiedosto = new File("Prometheus.txt");
+        tallentaja.tallenna("Prometheus.txt", tiedosto);
+        tiedosto = new File("Koe.txt");
+        tallentaja.tallenna("Koe.txt", tiedosto);
+        assertTrue( tallentaja.rivit.length > 100 );
+    }
+    
+    /**
+     * Testaa ison tiedoston tallennusta, jolloin denaamista rivi-taulua, joudutaan kasvattamaan.
+     * @throws FileNotFoundException 
+     */
+    @Test
+    public void isonTiedostonTalletus() throws FileNotFoundException {
+        tiedosto = new File("Koe.txt");
+        tallentaja.tallenna("Koe.txt", tiedosto);
+        tiedosto = new File("1001.txt");
+        tallentaja.tallenna("1001.txt", tiedosto);
+        assertTrue( tallentaja.rivit.length > 1000); 
+    }
+    
+    /**
+     * Testaa tallennuksen yritystä kun kyseisen niminen tiedosto on jo tallennettu.
+     * @throws FileNotFoundException 
+     */
+    @Test
+    public void yritetaantallentaaJoOlevaa() throws FileNotFoundException {
+        tiedosto = new File("Koe.txt");
+        tallentaja.tallenna("Koe.txt", tiedosto);
+        tallentaja.tallenna("Koe.txt", tiedosto);
+        assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
+                + "\nTiedosto 'Koe.txt' on jo olemassa.\n"
+                + "Tiedostoa ei tallennettu!\n", ulos.toString());
+    }
+    
+   
+    
+    /**
+     * Testaa tiedostojen nimien printtaamista.
+     * @throws FileNotFoundException 
+     */
+    @Test
+    public void tiedostojenListaus() throws FileNotFoundException {
         tiedosto = new File("Koe.txt");
         tallentaja.tallenna("Koe.txt", tiedosto);
         tiedosto = new File("Prometheus.txt");
         tallentaja.tallenna("Prometheus.txt", tiedosto);
-        assertTrue( tallentaja.rivit.length > 100 );
+        tallentaja.tulostaTiedostot();
+        assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
+                + "\nTiedosto 'Prometheus.txt' tallennettiin!\n"
+                + "\nTiedostot:\n"
+                + "Koe.txt\n"
+                + "Prometheus.txt\n\n", ulos.toString() );
+    }
+    
+    /**
+     * Testaa tiedostojen nimien printtausta, kun tiedostoja ei vielä ole lisätty.
+     */
+    @Test
+    public void olemattomienTiedostojenListaus() {
+        tallentaja.tulostaTiedostot();
+        assertEquals( "\nEi tallennettuja tiedostostoja!\n\n", ulos.toString() );
     }
     
     /**
@@ -266,10 +322,10 @@ public class SanaIndeksiTest {
         tallentaja.tallenna("Koe.txt", tiedosto);
         tiedosto = new File("Prometheus.txt");
         tallentaja.tallenna("Prometheus.txt", tiedosto);
-        hakija.printtaa("went / came", null);
+        hakija.printtaa("came / went", null);
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nTiedosto 'Prometheus.txt' tallennettiin!\n"
-                + "\nHaulla 'went / came' löytyi seuraavat rivit:\n"
+                + "\nHaulla 'came / went' löytyi seuraavat rivit:\n"
                 + "Koe.txt:\n"
                 + "11. he was talking to some maiden, went and told the secret to\n"
                 + "16. morning, when Cephalus went to hunt as usual.  Then she stole out\n"
@@ -282,7 +338,7 @@ public class SanaIndeksiTest {
                 + "112. their places came fraud and cunning, violence, and the wicked\n", ulos.toString() );
     }
     
-    /**
+     /**
      * Testaa, että haku toimii halutusti kun haetaan vain yhdestä tiedostosta.
      * @throws FileNotFoundException 
      */
@@ -292,9 +348,12 @@ public class SanaIndeksiTest {
         tallentaja.tallenna("Koe.txt", tiedosto);
         tiedosto = new File("Prometheus.txt");
         tallentaja.tallenna("Prometheus.txt", tiedosto);
+        tiedosto = new File("Pitkia.txt");
+        tallentaja.tallenna("Pitkia.txt", tiedosto);
         hakija.printtaa("sun", "Prometheus.txt");
         assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
                 + "\nTiedosto 'Prometheus.txt' tallennettiin!\n"
+                + "\nTiedosto 'Pitkia.txt' tallennettiin!\n"
                 + "\nHaulla 'sun' löytyi seuraavat rivit:\n"
                 + "Prometheus.txt:\n"
                 + "5. together.  As yet no sun gave light to the world, nor did the\n"
@@ -302,38 +361,5 @@ public class SanaIndeksiTest {
                 + "95. The sun his annual course obliquely made,\n", ulos.toString() );
     }
     
-    /**
-     * Testaa tiedostojen nimien printtaamista.
-     * @throws FileNotFoundException 
-     */
-    @Test
-    public void tiedostojenListaus() throws FileNotFoundException {
-        tiedosto = new File("Koe.txt");
-        tallentaja.tallenna("Koe.txt", tiedosto);
-        tiedosto = new File("Prometheus.txt");
-        tallentaja.tallenna("Prometheus.txt", tiedosto);
-        tallentaja.tulostaTiedostot();
-        assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
-                + "\nTiedosto 'Prometheus.txt' tallennettiin!\n"
-                + "\nTiedostot:\n"
-                + "Koe.txt\n"
-                + "Prometheus.txt\n\n", ulos.toString() );
-    }
     
-    @Test
-    public void isonTiedostonTalletus() throws FileNotFoundException {
-        tiedosto = new File("1001.txt");
-        tallentaja.tallenna("1001.txt", tiedosto);
-        assertTrue( tallentaja.rivit.length > 100); 
-    }
-    
-    @Test
-    public void yritetaantallentaaJoOlevaa() throws FileNotFoundException {
-        tiedosto = new File("Koe.txt");
-        tallentaja.tallenna("Koe.txt", tiedosto);
-        tallentaja.tallenna("Koe.txt", tiedosto);
-        assertEquals( "\nTiedosto 'Koe.txt' tallennettiin!\n"
-                + "\nTiedosto 'Koe.txt' on jo olemassa.\n"
-                + "Tiedostoa ei tallennettu!\n", ulos.toString());
-    }
 }

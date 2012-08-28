@@ -122,7 +122,7 @@ public class PuuSolmu implements Serializable {
     }
     
     /**
-     * Metodi asettaa jos valmiille solmulle uuden rivin.<p>
+     * Metodi asettaa jo valmiille solmulle uuden rivin.<p>
      * Ensin kutsutaan rivin tarkistusta. Jos riviä ei vielä ole kyseisellä solmulla,
      * kutsutaan lisaaRivi-metodia ja kasvatetaan rivien määrää.
      * Jos parametri vika on true (solmu on sanan viimeinen), lisätään rivinumero myös sanaRivit-tauluun.
@@ -130,12 +130,16 @@ public class PuuSolmu implements Serializable {
      * @param vika Boolean-muotoinen tieto siitä, kirjain sanan viimeinen.
      */
     public void setRivi(int rivi, boolean vika) {
-        if (!haeRivi(rivit, rivienMaara, rivi)) {
+        if (rivit[rivienMaara-1] != rivi) {
             rivit = lisaaRivi(rivi, rivit, rivienMaara);
             rivienMaara++;
         }
         if (vika) {
-            if (!haeRivi(sanaRivit, sanaRiveja, rivi)) {
+            if (sanaRiveja == 0) {
+                sanaRivit = lisaaRivi(rivi, sanaRivit, sanaRiveja);
+                sanaRiveja++;
+            }
+            else if (sanaRivit[sanaRiveja-1] != rivi) {
                 sanaRivit = lisaaRivi(rivi, sanaRivit, sanaRiveja);
                 sanaRiveja++;
             }
@@ -189,12 +193,13 @@ public class PuuSolmu implements Serializable {
     /**
      * Binäärihaku tarkistaa onko annetussa taulussa jo haettu rivinumero.<p>
      * Käydään läpi vain taulussa todella olevat rivit, siksi parametrina saadaan taulun alkioiden lukumäärä.
+     * Jos taulussa on kyseinen rivi, se on viimeinen alkio tarkastelluista
      * @param taulu Int-taulu, josta tarkistetaan rivinumero.
      * @param lkm Kyseisen taulun rivien lukumäärä.
      * @param nro Rivinumero, jota etsitään.
      * @return Palauttaa true, joa rivi löytyy.
      */
-    private boolean haeRivi(int[] taulu, int lkm, int nro) {
+    /*private boolean haeRivi(int[] taulu, int lkm, int nro) {
         int alku = 0; 
         int loppu = lkm-1;
         int keski;
@@ -223,15 +228,8 @@ public class PuuSolmu implements Serializable {
      * @return Palauttaa kasvatetun taulun.
      */
     private int[] kasvata(int[] taulu, int maara) {
-        
-        int kasvu;
-        if (maara < Integer.MAX_VALUE/2) {
-            kasvu = maara*2;
-        }
-        else {
-            kasvu = maara +100;
-        }
-        int[] uusi = new int[kasvu];
+       
+        int[] uusi = new int[maara*2];
         for (int i=0; i<taulu.length; i++) {
             uusi[i] = taulu[i];
         }

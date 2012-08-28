@@ -93,8 +93,6 @@ public class Hakija implements Serializable {
                         else if (rivit[i] > 0) {
                             System.out.println(tekstit[rivit[i]]);
                         }
-                        //jos rivinumero on nolla lopetetaan
-                        else break;
                     }
                 }
                 //jos haetaan kaikista tiedostostoista
@@ -114,8 +112,6 @@ public class Hakija implements Serializable {
                             System.out.println(tekstit[rivit[i]]);
                             indeksi++;
                         }
-                        //jos rivinumero on 0, siirrytään seuraavaan tiedostoon
-                        else break;
                     }
                 }
             }
@@ -156,10 +152,12 @@ public class Hakija implements Serializable {
                     break;
                 //jos ), haetaan sen ja aloitussulun väliset sanat
                 case ')':
-                    while (!hakutermit.huippu.sana.equals("(")) {
+                    while (!hakutermit.empty() && !hakutermit.huippu.sana.equals("(")) {
                         haeRivit();
                     }
-                    hakutermit.pop();
+                    if (!hakutermit.empty()) {
+                        hakutermit.pop();
+                    }
                     break;
                 default:
                     int alku = i;
@@ -175,7 +173,6 @@ public class Hakija implements Serializable {
         while (!hakutermit.empty()) {
             haeRivit();
         }
-
         return sanat.pop().rivit;
     }
     
@@ -189,7 +186,7 @@ public class Hakija implements Serializable {
         if (termi.equals("or")) {
             yhdistaOr();
         }
-        else {
+        else if (termi.equals("and")) {
             yhdistaAnd();
         }
         //sanat.push(null, keko.getRivit());
@@ -204,7 +201,7 @@ public class Hakija implements Serializable {
      * @return Palauttaa taulukon riveistä joilla kyseinen sana esiintyy.
      */
     public int[] etsi(String sana) {
-        int[] palautus;
+        int[] palautus = null;
         if (sana.charAt(sana.length()-1) == '*') {
             palautus = puu.etsiOsa(sana);
         }
@@ -226,11 +223,24 @@ public class Hakija implements Serializable {
     private void yhdistaOr() {
         int[] rivit1 = sanat.pop().rivit;
         int[] rivit2 = sanat.pop().rivit;
-        int[] yhdistetty = new int[rivit1.length+rivit2.length];
-        int indeksi = 0;
-        int i = 0;
-        int j = 0;
-        while (i<rivit1.length && j<rivit2.length) {
+        
+        if (rivit1 == null) {
+            if (rivit2 == null) {
+                sanat.push(null, null);
+            }
+            else {
+                sanat.push(null, rivit2);
+            }
+        }
+        else if (rivit2 == null) {
+            sanat.push(null, rivit1);
+        }
+        else {
+            int[] yhdistetty = new int[rivit1.length+rivit2.length];
+            int indeksi = 0;
+            int i = 0;
+            int j = 0;
+            while (i<rivit1.length && j<rivit2.length) {
             if (rivit1[i] == rivit2[j] && rivit1[i] !=0) {
                 yhdistetty[indeksi++] = rivit1[i++];
                 j++;
@@ -253,6 +263,7 @@ public class Hakija implements Serializable {
             }
         }
         sanat.push(null, yhdistetty);
+        }
     }
     
     /**
@@ -264,12 +275,11 @@ public class Hakija implements Serializable {
         int[] rivit2 = sanat.pop().rivit;
         int i=0;
         int j=0;
-        int koko;
+        int koko = 0;
         if (rivit1.length <= rivit2.length) {
             koko = rivit1.length;
         }
-        else {
-            koko = rivit2.length;
+        else { koko = rivit2.length;
         }
         int[] yhdistetty = new int[koko];
         int indeksi = 0;
@@ -288,11 +298,5 @@ public class Hakija implements Serializable {
         sanat.push(null, yhdistetty);
     }
     
-    /**
-     * Getteri
-     * @return palauttaa Tallentaja-olennon, joka hakijalla on käytössä.
-     */
-    public Tallentaja getTallentaja() {
-        return tallentaja;
-    }
+    
 }

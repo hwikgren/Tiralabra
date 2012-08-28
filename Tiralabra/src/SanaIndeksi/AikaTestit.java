@@ -40,11 +40,11 @@ public class AikaTestit {
         File tiedosto;
         String[] haut = new String[6];
         haut[0] = "sun";
-        haut[1] = "him*";
-        haut[2] = "the&he";
-        haut[3] = "(the / he)";
-        haut[4] = "(him & (he / her))";
-        haut[5] = "jarjestelmallisentelentelemattomyydellansakaan";
+        haut[1] = "sun&sun*";
+        haut[2] = "(sun / sun)";
+        haut[3] = "(sun / (sun / sun))";
+        haut[4] = "(sun / sun) / (sun / sun)";
+        haut[5] = "sun / sun";
         int[] rivit;
         int rivimaara;
         
@@ -55,11 +55,12 @@ public class AikaTestit {
         kakkonen.tallenna("Pitkia.txt", tiedosto);
         rivimaara = 0;
         for (int i=0; i<haut.length; i++) {
+            System.out.println("Sanan "+haut[i]+" hakuun meni: ");
             for (int k=0; k<10; k++) {
                 alkuAika = System.nanoTime();
                 try {
-                    //rivit = toinen.hae(haut[i]);
-                    rivit = toinen.hae("sun");
+                    rivit = toinen.hae(haut[i]);
+                    //rivit = toinen.hae("sun");
                 }
                 finally {
                     loppuAika = System.nanoTime();
@@ -72,8 +73,8 @@ public class AikaTestit {
                     }
                     else break;
                 }
-                System.out.println("Sanan "+haut[i]+" hakuun meni: "+(loppuAika - alkuAika));
-            System.out.println("Sanan sun hakuun meni: "+(loppuAika-alkuAika));
+                System.out.println(loppuAika - alkuAika);
+            //System.out.println("Sanan sun hakuun meni: "+(loppuAika-alkuAika));
               }
             
             System.out.println("Rivejä: "+rivimaara);
@@ -122,10 +123,11 @@ public class AikaTestit {
         }
         
         
-        //TESTATAAN PELKKÄÄ hakua monesta rivistä
+        //TESTATAAN PELKKÄÄ hakua eri määrillä hakusanoja
         System.out.println("TESTATAAN HAKU-METODIA KUN RIVEJÄ ON TIEDOSTOSSA PALJON");
         for (int i=0; i<haut.length; i++) {
-            for (int k=0; k<10; k++) {
+            System.out.println("Sanan "+haut[i]+" hakuun meni: ");
+            for (int k=0; k<10; k++) {    
                 alkuAika = System.nanoTime();
                 try {
                     rivit = toinen.hae(haut[i]);
@@ -141,24 +143,24 @@ public class AikaTestit {
                     }
                     else break;
                 }
-                System.out.println("Sanan "+haut[i]+" hakuun meni: "+(loppuAika - alkuAika));
+                System.out.println(loppuAika - alkuAika);
             }
             System.out.println("Rivejä: "+rivimaara);
             
             System.out.println("");
         }
         
-        
-        
-        
-        //TESTATAAN PELKKÄÄ ETSIMISTÄ
-        System.out.println("TESTATAAN ETSI-METODIA ERIPITUISILLA SANOILLA");
-        haut[0] = "h";
+        //TESTATAAN Hakua eri pituisilla sanoilla
+        System.out.println("TESTATAAN hae-METODIA ERIPITUISILLA SANOILLA");
+        haut[0] = "a";
+        haut[1] = "sun";
         haut[2] = "brother";
         haut[3] = "kolmivaihekilowatti*";
         haut[4] = "kolmivaihekilowattituntimittari";
+        haut[5] = "jarjestelmallisentelentelemattomyydellansakaan";
 
         for (int i=0; i<haut.length; i++) {
+            System.out.println("Sanan "+haut[i]+" hakuun meni: ");
             for (int k=0; k<10; k++) {
                 alkuAika = System.nanoTime();
                 try {
@@ -176,11 +178,45 @@ public class AikaTestit {
                     else break;
                 }
                 
-                System.out.println("Sanan "+haut[i]+" hakuun meni: "+(loppuAika - alkuAika));
+                System.out.println(loppuAika - alkuAika);
             }
             System.out.println("Rivejä: "+rivimaara);
             System.out.println("");
         }
+        
+        
+        //TESTATAAN PELKKÄÄ ETSIMISTÄ
+        /*System.out.println("TESTATAAN ETSI-METODIA ERIPITUISILLA SANOILLA");
+        haut[0] = "a";
+        haut[1] = "sun";
+        haut[2] = "brother";
+        haut[3] = "kolmivaihekilowatti*";
+        haut[4] = "kolmivaihekilowattituntimittari";
+
+        for (int i=0; i<haut.length; i++) {
+            System.out.println("Sanan "+haut[i]+" hakuun meni: ");
+            for (int k=0; k<10; k++) {
+                alkuAika = System.nanoTime();
+                try {
+                    rivit = toinen.etsi(haut[i]);
+                }
+                finally {
+                    loppuAika = System.nanoTime();
+                }
+
+                rivimaara = rivit.length;
+                for (int j=rivit.length-1; j>=0; j--) {
+                    if (rivit[j] == 0) {
+                        rivimaara--;
+                    }
+                    else break;
+                }
+                
+                System.out.println(loppuAika - alkuAika);
+            }
+            System.out.println("Rivejä: "+rivimaara);
+            System.out.println("");
+        }*/
         
         
         
