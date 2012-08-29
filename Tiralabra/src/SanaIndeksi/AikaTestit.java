@@ -54,7 +54,7 @@ public class AikaTestit {
         tiedosto = new File("Pitkia.txt");
         kakkonen.tallenna("Pitkia.txt", tiedosto);
         rivimaara = 0;
-        for (int i=0; i<haut.length; i++) {
+        /*for (int i=0; i<haut.length; i++) {
             System.out.println("Sanan "+haut[i]+" hakuun meni: ");
             for (int k=0; k<10; k++) {
                 alkuAika = System.nanoTime();
@@ -80,7 +80,7 @@ public class AikaTestit {
             System.out.println("Rivejä: "+rivimaara);
                 
                 System.out.println("");
-        }
+        }*/
         
         //TESTATAAN TALLENNUSTA
         System.out.println("\nTESTATAAN TALLENNUSTA");
@@ -100,7 +100,7 @@ public class AikaTestit {
         
         
         //TESTATAAN HAKU JA PRINTTAUS
-        System.out.println("TESTATAAN HAKU PRINTTAUKSELLA");
+       /* System.out.println("TESTATAAN HAKU PRINTTAUKSELLA");
         for (int i=0; i<haut.length; i++) {
             alkuAika = System.nanoTime();
             try {
@@ -148,23 +148,23 @@ public class AikaTestit {
             System.out.println("Rivejä: "+rivimaara);
             
             System.out.println("");
-        }
+        }*/
         
         //TESTATAAN Hakua eri pituisilla sanoilla
         System.out.println("TESTATAAN hae-METODIA ERIPITUISILLA SANOILLA");
-        haut[0] = "a";
-        haut[1] = "sun";
-        haut[2] = "brother";
-        haut[3] = "kolmivaihekilowatti*";
-        haut[4] = "kolmivaihekilowattituntimittari";
-        haut[5] = "jarjestelmallisentelentelemattomyydellansakaan";
+        haut[0] = "h";
+        haut[1] = "he";
+        haut[2] = "him";
+        haut[3] = "hims";
+        haut[4] = "himse";
+        haut[5] = "himsel";
 
         for (int i=0; i<haut.length; i++) {
             System.out.println("Sanan "+haut[i]+" hakuun meni: ");
             for (int k=0; k<10; k++) {
                 alkuAika = System.nanoTime();
                 try {
-                    rivit = toinen.etsi(haut[i]);
+                    rivit = toinen.hae(haut[i]);
                 }
                 finally {
                     loppuAika = System.nanoTime();

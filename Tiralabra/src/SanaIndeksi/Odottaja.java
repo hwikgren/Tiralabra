@@ -40,7 +40,7 @@ public class Odottaja {
      * @return Käyttäjän hakusanat.
      */
    public String odotaHakua() {
-        System.out.println("\nSanakosta voit hakea rivejä yhdellä tai useammalla sanalla.\n"
+        System.out.println("\nWordIista voit hakea rivejä yhdellä tai useammalla sanalla.\n"
                 + "Voit yhdistää sanahakuja merkeillä & (= ja) ja / (= tai).\n"
             + "Jos haet kolmea tai useampaa sanaa, ryhmitä hakusi suluilla.\n"
             + "Minkä tahansa sanoista voi katkaista *-merkillä.");

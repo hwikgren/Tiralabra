@@ -24,7 +24,7 @@ public class Tiralabra {
      */
     private static int paavalikko() {
         System.out.println("");
-        System.out.println("***SANAKKO***");
+        System.out.println("***WordI***");
         System.out.println("-------------");
         System.out.println("Päävalikko:");
         System.out.println(" 1. Hae kaikista tiedostoista");
