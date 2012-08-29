@@ -1,7 +1,7 @@
 package SanaIndeksi;
 
 
-import com.sun.tools.internal.xjc.api.S2JJAXBModel;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -38,21 +38,32 @@ public class AikaTestit {
         Tallentaja kakkonen = new Tallentaja();
         Hakija toinen = new Hakija(kakkonen);
         File tiedosto;
-        String[] haut = new String[6];
+        /*String[] haut = new String[6];
         haut[0] = "sun";
         haut[1] = "sun&sun*";
         haut[2] = "(sun / sun)";
         haut[3] = "(sun / (sun / sun))";
         haut[4] = "(sun / sun) / (sun / sun)";
-        haut[5] = "sun / sun";
+        haut[5] = "sun / sun";*/
+        int[] haut = new int[7];
+        haut[0] = 6;
+        haut[1] = 15;
+        haut[2] = 189;
+        haut[3] = 5432;
+        haut[4] = 35879;
+        haut[5] = 456781;
+        haut[6] = 9876542;
         int[] rivit;
         int rivimaara;
+        for (int i=0; i<10000000; i++) {
+            kakkonen.sanaPuu.lisaaSana(i, i);
+        }
         
         
         //Testataan hakua kun rivejä on vähän
-        System.out.println("TESTATAAN HAE-METODIA KUN RIVEJÄ ON TALLENNETTU VÄHÄN");
+        //System.out.println("TESTATAAN HAE-METODIA KUN RIVEJÄ ON TALLENNETTU VÄHÄN");
         tiedosto = new File("Pitkia.txt");
-        kakkonen.tallenna("Pitkia.txt", tiedosto);
+        //kakkonen.tallenna("Pitkia.txt", tiedosto);
         rivimaara = 0;
         /*for (int i=0; i<haut.length; i++) {
             System.out.println("Sanan "+haut[i]+" hakuun meni: ");
@@ -83,7 +94,7 @@ public class AikaTestit {
         }*/
         
         //TESTATAAN TALLENNUSTA
-        System.out.println("\nTESTATAAN TALLENNUSTA");
+        /*System.out.println("\nTESTATAAN TALLENNUSTA");
         for (int i=0; i<tiedostot.length; i++) {
             tiedosto = new File(tiedostot[i]);
 
@@ -96,7 +107,7 @@ public class AikaTestit {
             }
             System.out.println("Tiedoston "+tiedostot[i]+" tallenukseen meni: "+(loppuAika - alkuAika));
             System.out.println("");
-        }
+        }*/
         
         
         //TESTATAAN HAKU JA PRINTTAUS
@@ -152,12 +163,12 @@ public class AikaTestit {
         
         //TESTATAAN Hakua eri pituisilla sanoilla
         System.out.println("TESTATAAN hae-METODIA ERIPITUISILLA SANOILLA");
-        haut[0] = "h";
+        /*haut[0] = "h";
         haut[1] = "he";
         haut[2] = "him";
         haut[3] = "hims";
         haut[4] = "himse";
-        haut[5] = "himsel";
+        haut[5] = "himsel";*/
 
         for (int i=0; i<haut.length; i++) {
             System.out.println("Sanan "+haut[i]+" hakuun meni: ");
