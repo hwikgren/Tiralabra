@@ -4,6 +4,7 @@
  */
 package SanaIndeksi;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -56,4 +57,6 @@ public class Odottaja {
         System.out.println("Anna tiedoston nimi, josta haluat hakea rivejä:");
         return odota.nextLine();
     }
+    
+    
 }

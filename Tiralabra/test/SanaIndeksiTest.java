@@ -361,5 +361,4 @@ public class SanaIndeksiTest {
                 + "95. The sun his annual course obliquely made,\n", ulos.toString() );
     }
     
-    
 }

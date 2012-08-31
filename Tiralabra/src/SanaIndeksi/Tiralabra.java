@@ -34,8 +34,16 @@ public class Tiralabra {
         //System.out.println(" 5. Hae tiedostot, jossa haettu sana");
         System.out.println(" 0. Lopeta");
 
+        Scanner oma = new Scanner(System.in);
+        
         System.out.println("\nValitse numero:");
-        int valinta = lukija.nextInt();
+        int valinta;
+        try {
+            valinta = oma.nextInt();
+        }
+        catch(InputMismatchException ex) {
+            valinta = 9;
+        }
         return valinta;
     }
     
@@ -82,7 +90,7 @@ public class Tiralabra {
             * Luodaan tallentaja-olento.
             */
             tallentaja = new Tallentaja();
-            Puu puu = tallentaja.sanaPuu;
+            //Puu puu = tallentaja.sanaPuu;
 
             /**
             * Luodaan Hakija-olento.
@@ -138,6 +146,9 @@ public class Tiralabra {
                 case 4:
                     tallentaja.tulostaTiedostot();
                     odottaja.odotaEnteria();
+                    break;
+                case 9:
+                    System.out.println("\nEi sallittu valinta!");
                     break;
                 case 0:
                     muisti.talletaTiedot(hakija);
